@@ -32,34 +32,17 @@ $reservations = array();
 
 while ($row = $result->fetch_assoc()) {
 
-//    if ($row['repeatable'] == 1) {
-//        $begin = new DateTime($row["start_date"]);
-//
-//        $end = new DateTime($row["end_date"] . ' +7 day');
-//
-//        $daterange = new DatePeriod($begin, new DateInterval('P7D'), $end);
-//
-//        foreach ($daterange as $date) {
-//            $dates[] = $date->format("Y-m-d");
-//            array_push($reservations, $row['userID'], $row['classroomID'], $date->format("Y-m-d"), $row['start_time']);
-//        }
-//    }else{
-//        array_push($reservations, $row['userID'], $row['classroomID'], $row['start_date'], $row['start_time']);
-//    }
-
     $stmt = $conn->prepare("select name from lecture where id = ?");
     $stmt->bind_param("i", $row['lectureID']);
     $stmt->execute();
     $data = $stmt->get_result(); // get the mysqli result
     $lecture = $data->fetch_assoc();
-//        print_r($lecture);
 
     $stmt = $conn->prepare("select name from user where id = ?");
     $stmt->bind_param("i", $row['userID']);
     $stmt->execute();
     $data = $stmt->get_result(); // get the mysqli result
     $user_name = $data->fetch_assoc();
-//        print_r($user_name);
 
     $dateTime = DateTime::createFromFormat('H:i:s', $row['start_time']);
 
@@ -69,7 +52,6 @@ while ($row = $result->fetch_assoc()) {
     // Get the new time as a string
     $end_time = $dateTime->format('H:i:s');
 
-//        $reservation=array($row['repeatable'], $row['day_of_week'], $user_name['name'], $lecture['name'], $row['start_date'], $row['end_date'], $row['start_time'], $end_time);
     $reservation['title'] = $lecture['name'] . " by " . $user_name['name'];
     $reservation['start'] = $row['start_date'];
     $reservation['end'] = $row['end_date'];
@@ -88,18 +70,5 @@ $conn->close();
 $jsonData=json_encode($reservations);
 header('Content-Type: application/json');
 echo $jsonData;
-
-//    print_r($reservations);
-//
-//    foreach ($reservations as $reservation) {
-//        // Encode the data as JSON for JavaScript
-//        $jsonData = json_encode([
-//            'title' => $reservation[3] . " by " . $reservation[2],
-//            'start' => $reservation[4],
-//            'end' => $reservation[5],
-//            'startTime' => $reservation[6],
-//            'endTime' => $reservation[7]
-//        ]);
-//    }
 
 ?>
