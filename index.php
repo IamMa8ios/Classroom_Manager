@@ -47,6 +47,7 @@
 
         <!-- FullCalendar -->
         <div id="calendar"></div>
+
         </div>
 </div>
 

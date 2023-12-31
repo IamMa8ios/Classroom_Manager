@@ -14,4 +14,3 @@ function connect2db(){
     }
     return $conn;
 }
-
