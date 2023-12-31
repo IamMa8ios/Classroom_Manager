@@ -20,28 +20,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>Sidebar</h3>
-        </div>
-
-        <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#homeSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li><a href="#">Submenu 1</a></li>
-                    <li><a href="#">Submenu 2</a></li>
-                    <li><a href="#">Submenu 3</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#">Page 1</a>
-            </li>
-            <li>
-                <a href="#">Page 2</a>
-            </li>
-        </ul>
-    </nav>
+    <?php require_once "sidebar.php"?>
 
     <!-- Page Content -->
     <div id="content">
@@ -68,7 +47,7 @@
 
         <!-- FullCalendar -->
         <div id="calendar"></div>
-    </div>
+        </div>
 </div>
 
 <!-- Bootstrap JS, Popper.js, and jQuery -->

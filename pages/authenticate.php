@@ -1,3 +1,67 @@
+<?php
+include 'db.php';
+
+// Function to sanitize input data
+function sanitize($data)
+{
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+// Handle registration
+if (isset($_POST['register'])) {
+    $email = sanitize($_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    // Check if the email is already registered
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "Email is already registered";
+    } else {
+        // Insert new user into the database
+        $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $email, $password);
+
+        if ($stmt->execute()) {
+            echo "Registration successful";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+    }
+
+    $stmt->close();
+}
+
+// Handle login
+if (isset($_POST['login'])) {
+    $email = sanitize($_POST['email']);
+    $password = $_POST['password'];
+
+    // Retrieve user from the database based on the email
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            echo "Login successful";
+        } else {
+            echo "Invalid password";
+        }
+    } else {
+        echo "Email not found";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
 
 <!doctype html>
 <html lang="en">
@@ -33,8 +97,6 @@
 		<img src="https://assets.codepen.io/1462889/fcy.png" alt="">
 	</a>
 
- 
-
 	<div class="section">
 		<div class="container">
 			<div class="row full-height justify-content-center">
@@ -45,6 +107,7 @@
 			          	<label for="reg-log"></label>
 						<div class="card-3d-wrap mx-auto">
 							<div class="card-3d-wrapper">
+
 								<div class="card-front">
 									<div class="center-wrap">
 										<div class="section text-center">
@@ -62,6 +125,7 @@
 				      					</div>
 			      					</div>
 			      				</div>
+
 								<div class="card-back">
 									<div class="center-wrap">
 										<div class="section text-center">
@@ -82,6 +146,7 @@
 				      					</div>
 			      					</div>
 			      				</div>
+
 			      			</div>
 			      		</div>
 			      	</div>
@@ -89,15 +154,11 @@
 	      	</div>
 	    </div>
 	</div>
-    
-    
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-   
-
-
     <script src="js/main.js"></script>
+
   </body>
 </html>
