@@ -26,7 +26,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Calendar #10</title>
+    <title>Make a Reservation</title>
 </head>
 <body>
 
