@@ -1,8 +1,15 @@
+:root{
+  --clr-primary: lightblue;
+}
+html{
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  background-color: pink;
+  background-color: var(--clr-primary);
 }
 
 p {
@@ -83,6 +90,7 @@ h2 {
   padding-left: 1em;
   padding-right: 1em;
 }
+
 
 /* ====================================================== myStyles ======================================================  */
 
