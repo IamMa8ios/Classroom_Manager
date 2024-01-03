@@ -84,7 +84,9 @@ if (isset($_POST['login'])) {
     $stmt->close();
 }
 
-$conn->close();
+    if($_SESSION['role']==1){
+        $conn->close();
+    }
 ?>
 
 <!doctype html>

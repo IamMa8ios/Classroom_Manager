@@ -41,7 +41,7 @@
                                 <button class="btn btn-primary">Change Language</button>
                             </li>
                             <li class="nav-item me-2">
-                                <button class="btn btn-secondary">Login/Register</button>
+                                <a href="authenticate.php" class="btn btn-secondary" >Login/Register</a>
                             </li>
                         </ul>
                     </div>
