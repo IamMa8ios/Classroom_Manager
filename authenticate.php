@@ -100,10 +100,10 @@ $conn->close();
     <link rel="stylesheet" href="fonts/icomoon/style.css">  
     
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     
     <!-- Style -->
-    <link rel="stylesheet" href="../css/login-register.css">
+    <link rel="stylesheet" href="css/login-register.css">
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
