@@ -1,18 +1,23 @@
 <?php
-include 'db.php';
+require_once 'session_manager.php';
+require_once 'db_connector.php';
+
+if($_SESSION['role']!=1){
+    header("index.php");
+}
 
 // Function to sanitize input data
-function sanitize($data)
-{
+function sanitize($data){
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
+$_SESSION['role']=2;
+
 // Handle registration
 if (isset($_POST['register'])) {
-    $email = sanitize($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     // Check if the email is already registered
+    $conn = connect2db();
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -20,14 +25,27 @@ if (isset($_POST['register'])) {
 
     if ($result->num_rows > 0) {
         echo "Email is already registered";
+        $_SESSION['role']=1;
     } else {
+
+        $email = sanitize($_POST['email']);
+        $password = password_hash(sanitize($_POST['password']), PASSWORD_DEFAULT);
+        $name = sanitize($_POST['name']);
+        $dept = sanitize($_POST['department']);
+        $roleID = sanitize($_POST['roleID']);
+
         // Insert new user into the database
-        $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
-        $stmt->bind_param("ss", $email, $password);
+        $stmt = $conn->prepare("INSERT INTO users (email, password, name, department, roleID) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $email, $password, $name, $dept, $roleID);
 
         if ($stmt->execute()) {
             echo "Registration successful";
+            $_SESSION['name']=$name;
+            $_SESSION['email']=$email;
+            $_SESSION['dept']=$dept;
+            header("index.php");
         } else {
+            $_SESSION['role']=1;
             echo "Error: " . $stmt->error;
         }
     }
@@ -50,11 +68,17 @@ if (isset($_POST['login'])) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
             echo "Login successful";
+            $_SESSION['name']=$row['name'];
+            $_SESSION['email']=$row['email'];
+            $_SESSION['dept']=$row['department'];
+            header("index.php");
         } else {
             echo "Invalid password";
+            $_SESSION['role']=1;
         }
     } else {
         echo "Email not found";
+        $_SESSION['role']=1;
     }
 
     $stmt->close();
@@ -76,10 +100,10 @@ $conn->close();
     <link rel="stylesheet" href="fonts/icomoon/style.css">  
     
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     
     <!-- Style -->
-    <link rel="stylesheet" href="../css/login-register.css">
+    <link rel="stylesheet" href="css/login-register.css">
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
