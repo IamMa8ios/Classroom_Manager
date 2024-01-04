@@ -10,13 +10,16 @@ function connect2db(){
         }else if($_SESSION['role']==2){
             $username="teacher_user";
         }else if($_SESSION['role']==3){
-            $username="res_admin";
+            $username="booking_admin_user";
         }else if($_SESSION['role']==4){
-            $username="user_admin";
+            $username="teacher_admin_user";
         }
+    }else {
+        session_start();
+        $_SESSION['role']=1;
+        $username="guest_user";
     }
-
-    $password = "123456";
+        $password = "123456";
 
 // Create connection
     $conn = new mysqli($servername, $username, $password);

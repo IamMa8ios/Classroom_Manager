@@ -10,7 +10,7 @@ $result = $stmt->get_result(); // get the mysqli result
 
 foreach ($result as $building){
 
-    $sql="select name from classroom where building=?";
+    $sql="select name, id from classroom where building=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $building['name']);
     $stmt->execute();
@@ -39,7 +39,11 @@ $conn->close();
             <a href="#<?php echo $id; ?>" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><?php echo $building_name; ?></a>
             <ul class="collapse list-unstyled" id='<?php echo $id; ?>'>
                 <?php foreach ($classes as $class){ ?>
-                <li><a href="#"><?php echo $class['name']; ?></a></li>
+                <li>
+                    <form action="index.php" method="post">
+                        <button class="btn btn-block" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
+                    </form>
+                </li>
                 <?php } ?>
             </ul>
         </li>

@@ -12,12 +12,12 @@ function sanitize($data)
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
-$_SESSION['role'] = 2;
-
 $email = $password = $name = $dept = $roleID = "";
 
 // Handle registration
 if (isset($_POST['register'])) {
+
+    $_SESSION['role'] = 2;
 
     // Check if the email is already registered
     $conn = connect2db();
@@ -58,6 +58,9 @@ if (isset($_POST['register'])) {
 
 // Handle login
 if (isset($_POST['login'])) {
+
+    $_SESSION['role'] = 2;
+
     $email = sanitize($_POST['email']);
     $password = $_POST['password'];
 
@@ -89,9 +92,6 @@ if (isset($_POST['login'])) {
     $stmt->close();
 }
 
-if ($_SESSION['role'] == 1) {
-    $conn->close();
-}
 ?>
 
 <!doctype html>
@@ -146,7 +146,7 @@ if ($_SESSION['role'] == 1) {
                                                     <i class="input-icon fas fa-lock"></i>
                                                 </div>
                                                 <button name="login" value="login" class="btn mt-4">submit</button>
-                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left"></i>back</a>
+                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
                                                 <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your
                                                         password?</a></p>
                                             </form>
@@ -176,7 +176,7 @@ if ($_SESSION['role'] == 1) {
                                                     <i class="input-icon fas fa-building"></i>
                                                 </div>
                                                 <button name="register" value="register" class="btn mt-4" type="submit">submit</button>
-                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left"></i>back</a>
+                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
                                             </form>
                                         </div>
                                     </div>

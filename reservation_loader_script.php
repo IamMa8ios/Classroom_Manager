@@ -3,7 +3,7 @@ require_once "db_connector.php";
 
 $conn=connect2db();
 
-$classroomID = 1;
+$classroomID = $_GET['classroom'];
 //    $sql = "select * from reservation where classroomID = ?";
 //    $res = $conn->query($sql);
 
@@ -48,7 +48,6 @@ while ($row = $result->fetch_assoc()) {
 
 
 }
-//print_r($reservations);
 
 $conn->close();
 $jsonData=json_encode($reservations);
