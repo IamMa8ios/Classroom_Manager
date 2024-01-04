@@ -32,10 +32,12 @@ require_once "session_manager.php";
         <div id="content">
             <?php require_once "navbar.php" ?>
 
-            <?php if(isset($_POST['classroom'])){ ?>
+            <?php if (isset($_POST['classroom'])) { ?>
                 <!-- FullCalendar -->
                 <div id="calendar" class="bg-light"></div>
-            <?php }else { echo "Please select a classroom from the menu on the left"; } ?>
+            <?php } else {
+                echo "Please select a classroom from the menu on the left";
+            } ?>
 
         </div>
     </div>
@@ -72,6 +74,9 @@ require_once "session_manager.php";
                     url: 'reservation_loader_script.php?classroom=<?php echo $_POST["classroom"]; ?>',
                     dataType: 'json',
                     type: "POST"
+                },
+                dateClick: function(info) {
+                    location.href = `create_event.php?date=${info.dateStr}`;
                 }
             });
 
