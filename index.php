@@ -1,5 +1,5 @@
 <?php
-    require_once "session_manager.php";
+require_once "session_manager.php";
 ?>
 
 <!DOCTYPE html>
@@ -25,28 +25,12 @@
 
     <div id="wrapper">
 
-    <!-- Sidebar -->
-    <?php require_once "sidebar.php"?>
+        <!-- Sidebar -->
+        <?php require_once "sidebar.php" ?>
 
         <!-- Page Content -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-dark">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto ">
-                            <li class="nav-item me-2">
-                                <button class="btn btn-primary timerBtn" onclick="location.reload()"></button>
-                            </li>
-                            <li class="nav-item me-2">
-                                <button class="btn btn-primary">Change Language</button>
-                            </li>
-                            <li class="nav-item me-2">
-                                <a href="authenticate.php" class="btn btn-secondary" >Login/Register</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <?php require_once "navbar.php" ?>
 
             <!-- FullCalendar -->
             <div id="calendar" class="bg-light"></div>
