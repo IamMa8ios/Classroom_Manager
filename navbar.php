@@ -7,8 +7,8 @@ if (isset($_POST['logout'])) {
 
 require_once "db_connector.php";
 
-if(isset($_POST['classroom'])){
-    $conn=connect2db();
+if (isset($_POST['classroom'])) {
+    $conn = connect2db();
 
     $stmt = $conn->prepare("select name from classroom where id=?");
     $stmt->bind_param("i", $_POST['classroom']);
@@ -23,22 +23,37 @@ if(isset($_POST['classroom'])){
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <?php if(isset($_POST['classroom'])){ ?>
-                <h2>Viewing <?php echo $className['name'];?></h2>
-            <?php }else { echo "<h2> Please Select a Classroom </h2>"; } ?>
-            <ul class="navbar-nav ms-auto ">
-                <li class="nav-item me-2">
+            <?php if (isset($_POST['classroom'])) { ?>
+                <h2>Viewing <?php echo $className['name']; ?></h2>
+            <?php } else {
+                echo "<h2> Please Select a Classroom </h2>";
+            } ?>
+            <ul class="navbar-nav ms-auto d-flex justify-content-between align-items-baseline gap-3">
+                <li class="nav-item">
                     <button class="btn btn-primary timerBtn" onclick="location.reload()"></button>
                 </li>
-                <li class="nav-item me-2">
-                    <button class="btn btn-primary">Change Language</button>
+                <li class="nav-item">
+                    <div class="nav-item dropdown"> <!-- language dropdown menu -->
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Language
+                            <img src="img/united-states_32px.png" class="img-responsive inline-block"></img>
+                        </button>
+                        <!-- // FIXME: Logout btn show in Login/Register btn's place after login... -->
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item" href="index.php">
+                                <img src="img/united-states_64px.png" class="img-responsive inline-block"></img>
+                            </a>
+                            <a class="dropdown-item" href="index.php">
+                                <img src="img/greece_64px.png" class="img-responsive inline-block"></img>
+                            </a>
+                        </ul>
+                    </div>
                 </li>
-                <li class="nav-item me-2">
+                <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
                         <a href="authenticate.php" class="btn btn-secondary">Login/Register</a>
                     <?php } else { ?>
                         <form action="navbar.php" method="POST">
-                        <button name="logout" value="logout" class="btn btn-secondary">Logout</button>
+                            <button name="logout" value="logout" class="btn btn-secondary">Logout</button>
                         </form>
                     <?php } ?>
                 </li>

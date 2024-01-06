@@ -1,7 +1,8 @@
-:root{
+:root {
   --clr-primary: lightblue;
 }
-html{
+
+html {
   scroll-behavior: smooth;
 }
 
@@ -39,6 +40,7 @@ a {
   -o-transition: 0.3s all ease;
   transition: 0.3s all ease;
 }
+
 a,
 a:hover {
   text-decoration: none !important;
@@ -63,11 +65,13 @@ h2 {
   margin: 0 auto;
   background-color: pink;
 }
+
 #calendar .fc-view-container {
   background-color: #fff;
   -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
 }
+
 #calendar .fc-toolbar.fc-header-toolbar .fc-center {
   display: block;
 }
@@ -95,70 +99,68 @@ h2 {
 /* ====================================================== myStyles ======================================================  */
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
 }
 
 #wrapper {
-    display: flex;
+  display: flex;
 }
 
 #sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #343a40;
-    color: white;
-    transition: all 0.3s;
+  width: 250px;
+  height: 100vh;
+  background: #343a40;
+  color: white;
+  transition: all 0.3s;
 }
 
-#sidebar .sidebar-header {
-    padding: 20px;
-}
+
 
 #sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #818181;
+  padding: 20px 0;
+  border-bottom: 1px solid #818181;
 }
 
 #sidebar ul p {
-    color: white;
-    padding: 10px;
+  color: white;
+  padding: 10px;
 }
 
 #sidebar ul li a {
-    padding: 10px;
-    font-size: 1.1em;
-    display: block;
-    color: #818181;
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+  color: #818181;
 }
 
 #sidebar ul li a:hover {
-    color: white;
+  color: white;
 }
 
 #sidebar ul li.active {
-    background-color: #4c4c4c;
+  background-color: #4c4c4c;
 }
 
 #sidebar ul li.active a {
-    color: #fff;
+  color: #fff;
 }
 
 #content {
-    width: 100%;
-    padding: 20px;
+  width: 100%;
+  padding: 20px;
 }
 
 .navbar {
-    background-color: #343a40;
-    color: white;
+  background-color: #343a40;
+  color: white;
 }
 
 .navbar-brand {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #timer {
-    color: #28a745;
+  color: #28a745;
 }
