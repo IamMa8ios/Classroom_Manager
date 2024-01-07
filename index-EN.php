@@ -18,6 +18,7 @@ require_once "session_manager.php";
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -26,11 +27,11 @@ require_once "session_manager.php";
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php require_once "sidebar.php" ?>
+        <?php require_once "sidebar-EN.php" ?>
 
         <!-- Page Content -->
         <div id="content">
-            <?php require_once "navbar.php" ?>
+            <?php require_once "navbar-EN.php" ?>
 
             <?php if (isset($_POST['classroom'])) { ?>
                 <!-- FullCalendar -->
@@ -38,7 +39,6 @@ require_once "session_manager.php";
             <?php } else {
                 echo "Please select a classroom from the menu on the left";
             } ?>
-
         </div>
     </div>
 
@@ -52,14 +52,15 @@ require_once "session_manager.php";
     <script src='fullcalendar/packages/timegrid/main.js'></script>
     <script src='fullcalendar/packages/list/main.js'></script>
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+
             var calendarEl = document.getElementById('calendar');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
                 height: "parent",
+                disableDragging: true,
                 header: {
                     left: 'prev,next today',
                     center: 'title',
@@ -68,15 +69,15 @@ require_once "session_manager.php";
                 defaultView: 'dayGridMonth',
                 defaultDate: '2023-12-12',
                 navLinks: true, // can click day/week names to navigate views
-                editable: true,
+                editable: false,
                 eventLimit: true, // allow "more" link when too many events
                 events: {
                     url: 'reservation_loader_script.php?classroom=<?php echo $_POST["classroom"]; ?>',
                     dataType: 'json',
                     type: "POST"
                 },
-                dateClick: function(info) {
-                    location.href = `create_event.php?date=${info.dateStr}`;
+                dateClick: function (info) {
+                    location.href = `create_event-EN.php?date=${info.dateStr}`;
                 }
             });
 

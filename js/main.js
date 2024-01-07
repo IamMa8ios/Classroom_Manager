@@ -9,7 +9,7 @@ function startTimer() {
         countdownTime--;
 
         // Display the remaining time on the button
-        document.querySelector('.timerBtn').innerHTML = `<i class="fas fa-sync-alt"></i> Logout in: (${formatTime(countdownTime)})`;
+        document.querySelector('.timerBtn').innerHTML = `<i class="fas fa-sync-alt"></i> (${formatTime(countdownTime)})`;
 
         // Check if the countdown has reached 0
         if (countdownTime <= 0) {

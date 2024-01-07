@@ -28,7 +28,7 @@ $conn->close();
 <nav id="sidebar">
     <div class="sidebar-header">
         <img src="img/aegean1.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
-        <h3>View Class Schedule</h3>
+        <h3>Πρόγραμμα Αιθουσών</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -41,7 +41,7 @@ $conn->close();
             <ul class="collapse list-unstyled" id='<?php echo $id; ?>'>
                 <?php foreach ($classes as $class){ ?>
                 <li>
-                    <form action="index.php" method="post">
+                    <form action="index-GR.php" method="post">
                         <button class="btn btn-block" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
                     </form>
                 </li>
