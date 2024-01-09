@@ -25,6 +25,17 @@ function formatTime(seconds) {
     var remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
+function clearForm() {
+    var classID = document.getElementById("classID").value;
+    var startDate = document.getElementById("startDate").value;
+    var className = document.getElementById("className").value;
+    
+    document.getElementById("create_event_form").reset();
+
+    document.getElementById("classID").value = classID;
+    document.getElementById("startDate").value = startDate;
+    document.getElementById("className").value = className;
+}
 // -------------------------------------------------- /timer button -------------------------------------------------- 
 
 // -------------------------------------------------- MAIN --------------------------------------------------

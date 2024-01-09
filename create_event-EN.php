@@ -19,9 +19,7 @@ require_once "session_manager.php";
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
-
     <link rel="stylesheet" href="css/style.css">
-    
 </head>
 
 <body>
@@ -35,22 +33,27 @@ require_once "session_manager.php";
         <div id="content">
             <?php require_once "navbar-EN.php" ?>
 
-
-
-            <div class="container mt-5">
-                <form class="create_event_form">
+            <div class="container mt-5 p-3" id="create-event-container">
+                <form id="create_event_form">
+                    <input type="text" class="form-control" name="classID" id="classID"
+                        value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
                     <div class="row g-3 my-3">
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="className">Class Name</label>
-                                <input type="text" class="form-control" id="className" disabled>
+                                <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>"
+                                    id="className" required readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="lectures">Lectures</label>
-                                <select class="form-select" id="lectures">
-                                    <!-- Add your options here -->
+                                <select class="form-select" name="lecture" id="lectures" required>
+                                    <?php foreach ($lectures as $lecture) { ?>
+                                        <option value="<?php echo $lecture['id']; ?>">
+                                            <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
+                                        </option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -60,7 +63,8 @@ require_once "session_manager.php";
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="startDate">Start Date</label>
-                                <input type="date" class="form-control" id="startDate">
+                                <input type="date" class="form-control" name="startDate"
+                                    value="<?php echo $_GET['date']; ?>" id="startDate" required readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -86,7 +90,7 @@ require_once "session_manager.php";
                         </div>
                     </div>
 
-                    <div class="row g-3 my-3">
+                    <div class="row g-3 my-3 daysOfWeek">
                         <div class="col-md-6">
                             <label class="form-label">Choose which days you would like to book</label>
                             <div class="form-check">
@@ -116,8 +120,7 @@ require_once "session_manager.php";
                         </div>
                     </div>
 
-                    <h2 class="my-3 text-center position-relative d-flex justify-content-center align-items-center">OR
-                    </h2>
+                    <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
 
                     <div class="row g-3 my-3">
                         <div class="col-md-6">
@@ -127,9 +130,12 @@ require_once "session_manager.php";
 
                     <div class="row my-3">
                         <div class="col">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="button" class="btn btn-secondary">Clear</button>
-                            <button type="button" class="btn btn-secondary">Back</button>
+                            <button type="button" class="btn btn-secondary btn-not" ><i
+                                    class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
+                            <button type="button" class="btn btn-secondary btn-not" onclick="clearForm()">Clear <i
+                                    class="fas fa-eraser"></i></button>
+                            <button type="submit" class="btn btn-primary">Submit <i
+                                    class="far fa-check-circle"></i></button>
                         </div>
                     </div>
                 </form>
@@ -152,7 +158,6 @@ require_once "session_manager.php";
     <script src='fullcalendar/packages/daygrid/main.js'></script>
     <script src='fullcalendar/packages/timegrid/main.js'></script>
     <script src='fullcalendar/packages/list/main.js'></script>
-
 
     <script src='js/main.js'></script>
 </body>

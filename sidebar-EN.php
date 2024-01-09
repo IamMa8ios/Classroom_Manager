@@ -25,7 +25,7 @@ $conn->close();
 //print_r($buildings);
 ?>
 
-<nav id="sidebar">
+<nav class="sidebar">
     <div class="sidebar-header">
         <img src="img/aegean1.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
         <h3>View Class Schedule</h3>

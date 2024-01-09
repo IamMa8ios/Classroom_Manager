@@ -17,7 +17,7 @@ if (isset($_POST['classroom'])) {
     $data = $stmt->get_result(); // get the mysqli result
     $className = $data->fetch_assoc();
     
-    $_SESSION['classname'] = $className['name'];
+    $_SESSION['className'] = $className['name'];
 }
 
 
@@ -48,19 +48,21 @@ if (isset($_POST['classroom'])) {
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="index-EN.php">
                                 <img src="img/united-states_64px.png" class="img-responsive inline-block"></img>
+                                EN-US
                             </a>
                             <a class="dropdown-item" href="index-GR.php">
                                 <img src="img/greece_64px.png" class="img-responsive inline-block"></img>
+                                GR
                             </a>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
-                        <a href="authenticate.php" class="btn btn-secondary">Login/Register</a>
+                        <a href="authenticate.php" class="btn btn-secondary text-center d-flex align-items-center">Login / Register</a>
                     <?php } else { ?>
                         <form action="navbar-EN.php" method="POST">
-                            <button name="logout" value="logout" class="btn btn-secondary">Logout</button>
+                            <button name="logout" value="logout" class="btn btn-secondary text-center">Logout</button>
                         </form>
                     <?php } ?>
                 </li>
