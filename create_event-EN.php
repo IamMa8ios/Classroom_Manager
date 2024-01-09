@@ -1,6 +1,17 @@
 <?php
 require_once "session_manager.php";
+require_once "db_connector.php";
 
+$conn = connect2db();
+$stmt = $conn->prepare("select * from lecture where userID = ?");
+$stmt->bind_param("i", $_SESSION['userID']);
+$stmt->execute();
+$result = $stmt->get_result(); // get the mysqli result
+$lectures = array();
+while ($lecture = $result->fetch_assoc()) {
+    array_push($lectures, $lecture);
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +20,7 @@ require_once "session_manager.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Create a reservation</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- FullCalendar CSS -->
@@ -35,22 +46,25 @@ require_once "session_manager.php";
         <div id="content">
             <?php require_once "navbar-EN.php" ?>
 
-
-
             <div class="container mt-5">
-                <form class="create_event_form">
+                <form class="create_event_form" action="create_event_script.php" method="post">
+
+                    <input type="text" class="form-control" name="classID" id="classID" value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
+
                     <div class="row g-3 my-3">
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="className">Class Name</label>
-                                <input type="text" class="form-control" id="className" disabled>
+                                <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>" id="className" required readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="lectures">Lectures</label>
-                                <select class="form-select" id="lectures">
-                                    <!-- Add your options here -->
+                                <select class="form-select" name="lectureID" id="lectures" required>
+                                    <?php foreach ($lectures as $lecture){ ?>
+                                        <option value="<?php echo $lecture['id']; ?>"><?php echo $lecture['code']." - ".$lecture['name'] ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -60,13 +74,13 @@ require_once "session_manager.php";
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="startDate">Start Date</label>
-                                <input type="date" class="form-control" id="startDate">
+                                <input type="date" class="form-control" name="startDate" value="<?php echo $_GET['date']; ?>" id="startDate" required readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="endDate">End Date</label>
-                                <input type="date" class="form-control" id="endDate">
+                                <input type="date" class="form-control" name="endDate" id="endDate">
                             </div>
                         </div>
                     </div>
@@ -75,13 +89,13 @@ require_once "session_manager.php";
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="startTime">Start Time</label>
-                                <input type="time" class="form-control" id="startTime">
+                                <input type="time" class="form-control" name="startTime" id="startTime" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" id="duration" min="1" max="3" step="0.5">
+                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
                             </div>
                         </div>
                     </div>
@@ -90,27 +104,27 @@ require_once "session_manager.php";
                         <div class="col-md-6">
                             <label class="form-label">Choose which days you would like to book</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="monday">
+                                <input class="form-check-input" type="checkbox" name="monday" value="" id="monday">
                                 <label class="form-check-label" for="monday">Monday</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="tuesday">
+                                <input class="form-check-input" type="checkbox" name="tuesday" value="" id="tuesday">
                                 <label class="form-check-label" for="tuesday">Tuesday</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="wednesday">
+                                <input class="form-check-input" type="checkbox" name="wednesday" value="" id="wednesday">
                                 <label class="form-check-label" for="wednesday">Wednesday</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="thursday">
+                                <input class="form-check-input" type="checkbox" name="thursday" value="" id="thursday">
                                 <label class="form-check-label" for="thursday">Thursday</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="friday">
+                                <input class="form-check-input" type="checkbox" name="friday" value="" id="friday">
                                 <label class="form-check-label" for="friday">Friday</label>
                             </div>
                             <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" value="" id="recurring">
+                                <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
                                 <label class="form-check-label" for="recurring">Recurring</label>
                             </div>
                         </div>
@@ -121,7 +135,7 @@ require_once "session_manager.php";
 
                     <div class="row g-3 my-3">
                         <div class="col-md-6">
-                            <input type="file" class="form-control" id="fileUpload">
+                            <input type="file" name="file" class="form-control" id="fileUpload">
                         </div>
                     </div>
 
@@ -139,9 +153,6 @@ require_once "session_manager.php";
         </div>
     </div>
 
-
-    </div>
-    </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

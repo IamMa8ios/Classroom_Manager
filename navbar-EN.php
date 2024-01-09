@@ -17,9 +17,9 @@ if (isset($_POST['classroom'])) {
     $data = $stmt->get_result(); // get the mysqli result
     $className = $data->fetch_assoc();
     
-    $_SESSION['classname'] = $className['name'];
+    $_SESSION['className'] = $className['name'];
+    $conn->close();
 }
-
 
 ?>
 

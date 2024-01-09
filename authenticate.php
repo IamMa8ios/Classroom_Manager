@@ -79,7 +79,8 @@ if (isset($_POST['login'])) {
             $_SESSION['name'] = $row['name'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['dept'] = $row['department'];
-            header("Location: index.php");
+            $_SESSION['userID'] = $row['id'];
+            header("Location: index-EN.php");
         } else {
             echo "Invalid password";
             $_SESSION['role'] = 1;

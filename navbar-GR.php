@@ -15,8 +15,8 @@ if (isset($_POST['classroom'])) {
     $stmt->execute();
     $data = $stmt->get_result(); // get the mysqli result
     $className = $data->fetch_assoc();
+    $conn->close();
 }
-
 
 ?>
 
