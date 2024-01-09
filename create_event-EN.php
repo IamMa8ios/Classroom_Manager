@@ -21,6 +21,7 @@ require_once "session_manager.php";
 
 
     <link rel="stylesheet" href="css/style.css">
+    
 </head>
 
 <body>
@@ -34,116 +35,112 @@ require_once "session_manager.php";
         <div id="content">
             <?php require_once "navbar-EN.php" ?>
 
-            <form class="row g-3 needs-validation" novalidate>
-                <!-- classID(classname), dropdown for Lectures, start date, end date, recurring event(checkbox), daysOfWeek(5x checkbox)  -->
-                <!-- start time, duration -->
 
-                <!--  classID, classname -->
-                <!-- dropdown for Lectures, recurring event(checkbox) -->
-                <!-- start date, end date -->
-                <!-- daysOfWeek(5x checkbox), start time, duration  -->
 
-                <div class="col-md-6">
-                    <input style="display: none" name="classID" value="<?php echo $_SESSION['classID'] ?>">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Classroom</span>
-                        <input type="text" class="form-control" id="validationTooltipUsername"
-                            value="<?php echo $_SESSION['classname'] ?>"
-                            aria-describedby="validationTooltipUsernamePrepend" required disabled>
-                        <div class="invalid-tooltip">
-                            Please choose a unique and valid username.
+            <div class="container mt-5">
+                <form class="create_event_form">
+                    <div class="row g-3 my-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="className">Class Name</label>
+                                <input type="text" class="form-control" id="className" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="lectures">Lectures</label>
+                                <select class="form-select" id="lectures">
+                                    <!-- Add your options here -->
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Lectures</span>
-                        <select class="form-select" id="validationCustom04" required>
-                            <option selected disabled value="">Choose...</option>
-                            <option>...</option>
-                        </select>
+
+                    <div class="row g-3 my-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="startDate">Start Date</label>
+                                <input type="date" class="form-control" id="startDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="endDate">End Date</label>
+                                <input type="date" class="form-control" id="endDate">
+                            </div>
+                        </div>
                     </div>
 
-                </div>
+                    <div class="row g-3 my-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="startTime">Start Time</label>
+                                <input type="time" class="form-control" id="startTime">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="duration">Duration</label>
+                                <input type="number" class="form-control" id="duration" min="1" max="3" step="0.5">
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Start Date</span>
-                        <input type="text" class="form-control" id="validationTooltipUsername"
-                            value="<?php echo $_GET['date'] ?>" aria-describedby="validationTooltipUsernamePrepend"
-                            required disabled>
+                    <div class="row g-3 my-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Choose which days you would like to book</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="monday">
+                                <label class="form-check-label" for="monday">Monday</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="tuesday">
+                                <label class="form-check-label" for="tuesday">Tuesday</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="wednesday">
+                                <label class="form-check-label" for="wednesday">Wednesday</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="thursday">
+                                <label class="form-check-label" for="thursday">Thursday</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="friday">
+                                <label class="form-check-label" for="friday">Friday</label>
+                            </div>
+                            <div class="form-check my-3">
+                                <input class="form-check-input" type="checkbox" value="" id="recurring">
+                                <label class="form-check-label" for="recurring">Recurring</label>
+                            </div>
+                        </div>
+                    </div>
 
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">End Date</span>
-                        <input type="date" class="form-control" id="validationTooltipUsername" value=""
-                            aria-describedby="validationTooltipUsernamePrepend" required>
+                    <h2 class="my-3 text-center position-relative d-flex justify-content-center align-items-center">OR
+                    </h2>
 
+                    <div class="row g-3 my-3">
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" id="fileUpload">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Start Time</span>
-                        <input type="time" class="form-control" name="" value="10:05 AM" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Duration</span>
-                        <input step=".5" value="0" type="number" min="1" max="3" class="form-control" />
 
+                    <div class="row my-3">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-secondary">Clear</button>
+                            <button type="button" class="btn btn-secondary">Back</button>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Monday
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                        <label class="form-check-label" for="defaultCheck2">
-                            Tuesday
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
-                        <label class="form-check-label" for="defaultCheck3">
-                            Wednesday
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-                        <label class="form-check-label" for="defaultCheck4">
-                            Thursday
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
-                        <label class="form-check-label" for="defaultCheck5">
-                            Friday
-                        </label>
-                    </div>
-                </div>
+                </form>
+            </div>
 
-
-
-                <div class="col-md-12">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Recurring Event
-                            input</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <button class="btn btn-primary" type="submit">Submit form</button>
-                </div>
-            </form>
 
         </div>
+    </div>
+
+
+    </div>
     </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->

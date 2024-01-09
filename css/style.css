@@ -164,3 +164,19 @@ body {
 #timer {
   color: #28a745;
 }
+
+.create_event_form h2::before,
+.create_event_form h2::after{
+  content: '';
+  position: absolute;
+  width: 45%;
+  height: 2px;
+  border-radius: 1000px;
+  background-color: black;
+}
+.create_event_form h2::before{
+  left: 0;
+}
+.create_event_form h2::after{
+  right: 0;
+}
