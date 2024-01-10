@@ -35,7 +35,7 @@ if (isset($_POST['classroom'])) {
             } ?>
             <ul class="navbar-nav ms-auto d-flex justify-content-between align-items-baseline gap-3">
                 <li class="nav-item">
-                    <button class="btn btn-primary timerBtn" onclick="location.reload()"></button>
+                    <button class="btn-slide timerBtn" onclick="location.reload()"></button>
                 </li>
                 <li class="nav-item">
                     <div class="nav-item dropdown"> <!-- language dropdown menu -->
@@ -44,7 +44,6 @@ if (isset($_POST['classroom'])) {
                             <img src="img/united-states_32px.png" class="img-responsive inline-block"></img>
                         </button>
 
-                        <!-- // FIXME: Logout btn show in Login/Register btn's place after login... -->
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="index-EN.php">
                                 <img src="img/united-states_64px.png" class="img-responsive inline-block"></img>
@@ -59,7 +58,7 @@ if (isset($_POST['classroom'])) {
                 </li>
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
-                        <a href="authenticate.php" class="btn btn-secondary text-center d-flex align-items-center">Login / Register</a>
+                        <a href="authenticate.php" class="btn-slide"><span>Login / Register</span></a> <!-- FIXME: GR  page too (class="btn-slide")-->
                     <?php } else { ?>
                         <form action="navbar-EN.php" method="POST">
                             <button name="logout" value="logout" class="btn btn-secondary text-center">Logout</button>

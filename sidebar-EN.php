@@ -28,7 +28,7 @@ $conn->close();
 <nav class="sidebar">
     <div class="sidebar-header">
         <img src="img/aegean1.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
-        <h3>View Class Schedule</h3>
+        <a href="index-EN.php" class="text-wrap text-capitalize">View Class Schedule</a>
     </div>
 
     <ul class="list-unstyled components">
@@ -36,13 +36,13 @@ $conn->close();
             foreach ($buildings as $building_name=>$classes){
                 $id=str_replace(' ', '', $building_name);
         ?>
-        <li class="active">
-            <a href="#<?php echo $id; ?>" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><?php echo $building_name; ?></a>
+        <li class="active pb-2">
+            <a href="#<?php echo $id; ?>" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-capitalize"><strong><?php echo $building_name; ?></strong></a>
             <ul class="collapse list-unstyled" id='<?php echo $id; ?>'>
                 <?php foreach ($classes as $class){ ?>
-                <li>
+                <li class="sidebar-li px-2">
                     <form action="index-EN.php" method="post">
-                        <button class="btn btn-block" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
+                        <button class="btn" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
                     </form>
                 </li>
                 <?php } ?>
