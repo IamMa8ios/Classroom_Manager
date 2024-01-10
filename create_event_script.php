@@ -63,10 +63,6 @@ if (isset($_POST['recurring'])) {
         $dayOfWeek = "[" . date('w', strtotime(sanitize($_POST['startDate']))) . "]";
         $endDate=sanitize($_POST['endDate']);
 
-        echo $startDate;
-        echo $endDate;
-        exit();
-
         $stmt = $conn->prepare("insert into reservation(userID, classroomID, lectureID, repeatable, start_date, end_date, day_of_week, start_time, duration) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("iiiissssi", $userID, $classID, $lectureID, $repeatable, $startDate, $endDate, $dayOfWeek, $startTime, $duration);
 

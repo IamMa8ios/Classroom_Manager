@@ -18,7 +18,7 @@ if(isset($_GET['date'])){
     $startDate=$_GET['date'];
 }
 
-//FIXME: Check if class is actually available for requested event
+//FIXME: Actual translation
 ?>
 
 <!DOCTYPE html>

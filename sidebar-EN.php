@@ -27,7 +27,7 @@ $conn->close();
 
 <nav class="sidebar">
     <div class="sidebar-header">
-        <img src="img/aegean1.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
+        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
         <a href="index-EN.php" class="text-wrap text-capitalize">View Class Schedule</a>
     </div>
 
