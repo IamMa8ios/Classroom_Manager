@@ -2,8 +2,10 @@
 require_once 'session_manager.php';
 require_once 'db_connector.php';
 
+//FIXME: Create GR page
+
 if ($_SESSION['role'] != 1) {
-    header("Location: index.php");
+    header("Location: index-EN.php");
 }
 
 // Function to sanitize input data
@@ -46,7 +48,7 @@ if (isset($_POST['register'])) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['dept'] = $dept;
-            header("Location: index.php");
+            header("Location: index-EN.php");
         } else {
             $_SESSION['role'] = 1;
             echo "Error: " . $stmt->error;
@@ -79,7 +81,8 @@ if (isset($_POST['login'])) {
             $_SESSION['name'] = $row['name'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['dept'] = $row['department'];
-            header("Location: index.php");
+            $_SESSION['userID'] = $row['id'];
+            header("Location: index-EN.php");
         } else {
             echo "Invalid password";
             $_SESSION['role'] = 1;
@@ -146,7 +149,7 @@ if (isset($_POST['login'])) {
                                                     <i class="input-icon fas fa-lock"></i>
                                                 </div>
                                                 <button name="login" value="login" class="btn mt-4">submit</button>
-                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
+                                                <a href="index-EN.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
                                                 <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your
                                                         password?</a></p>
                                             </form>
@@ -176,7 +179,7 @@ if (isset($_POST['login'])) {
                                                     <i class="input-icon fas fa-building"></i>
                                                 </div>
                                                 <button name="register" value="register" class="btn mt-4" type="submit">submit</button>
-                                                <a href="index.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
+                                                <a href="index-EN.php" class="btn mt-4"><i class="fas fa-long-arrow-alt-left mx-2"></i>back</a>
                                             </form>
                                         </div>
                                     </div>

@@ -18,8 +18,8 @@ if (isset($_POST['classroom'])) {
     $className = $data->fetch_assoc();
     
     $_SESSION['className'] = $className['name'];
+    $conn->close();
 }
-
 
 ?>
 
