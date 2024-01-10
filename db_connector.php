@@ -4,7 +4,11 @@ function connect2db(){
 
     $username = null;
 
-    if(isset($_SESSION) && isset($_SESSION['role'])){
+    if(!isset($_SESSION)){
+        session_start();
+    }
+
+    if(isset($_SESSION['role'])){
         if($_SESSION['role']==1){
             $username="guest_user";
         }else if($_SESSION['role']==2){
@@ -15,7 +19,6 @@ function connect2db(){
             $username="teacher_admin_user";
         }
     }else {
-        session_start();
         $_SESSION['role']=1;
         $username="guest_user";
     }

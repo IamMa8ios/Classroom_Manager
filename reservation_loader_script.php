@@ -37,15 +37,21 @@ while ($row = $result->fetch_assoc()) {
     $end_time = $dateTime->format('H:i:s');
 
     $reservation['title'] = $lecture['name'] . " by " . $user_name['name'];
-    $reservation['start'] = $row['start_date'];
-    $reservation['end'] = $row['end_date'];
-    $reservation['startTime'] = $row['start_time'];
-    $reservation['endTime'] = $end_time;
-    if($row['day_of_week']!=null){
-        $reservation['daysOfWeek']=$row['day_of_week'];
-    }
-    array_push($reservations, $reservation);
+    $reservation['start'] = $row['start_date']."T".$row['start_time'];
+    $reservation['allDay'] = false;
 
+    if($row['repeatable']==true){
+        $reservation['end'] = $row['end_date']."T".$end_time;
+        $reservation['startRecur'] = $reservation['start'];
+        $reservation['endRecur'] = $reservation['end'];
+        $reservation['daysOfWeek']=$row['day_of_week'];
+
+    }else{
+        $reservation['end'] = $row['start_date']."T".$end_time;
+    }
+
+    array_push($reservations, $reservation);
+    $reservation=array();
 
 }
 
