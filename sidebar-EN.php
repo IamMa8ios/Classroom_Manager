@@ -26,9 +26,9 @@ $conn->close();
 ?>
 
 <nav class="sidebar">
-    <div class="sidebar-header">
-        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
-        <a href="index-EN.php" class="text-wrap text-capitalize">View Class Schedule</a>
+    <div class="sidebar-header text-center">
+        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100 rounded-3">
+        <a href="index-EN.php" class="text-wrap text-capitalize text-center">View Class Schedule</a>
     </div>
 
     <ul class="list-unstyled components">
