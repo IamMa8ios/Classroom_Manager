@@ -58,7 +58,7 @@ if (isset($_POST['classroom'])) {
                 </li>
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
-                        <a href="authenticate.php" class="btn-slide"><span>Login / Register</span></a> <!-- FIXME: GR  page too (class="btn-slide")-->
+                        <a href="authenticate-EN.php" class="btn-slide"><span>Login / Register</span></a> <!-- FIXME: GR  page too (class="btn-slide")-->
                     <?php } else { ?>
                         <form action="navbar-EN.php" method="POST">
                             <button name="logout" value="logout" class="btn btn-secondary text-center">Logout</button>

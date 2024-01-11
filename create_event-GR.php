@@ -37,7 +37,7 @@ $maxStart = $maxStart->format('H:i:s');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a reservation</title>
+    <title>Δημιουργία Κράτησης</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- FullCalendar CSS -->
@@ -52,117 +52,117 @@ $maxStart = $maxStart->format('H:i:s');
 
 <body>
 
-    <div id="wrapper">
+<div id="wrapper">
 
-        <!-- Sidebar -->
-        <?php require_once "sidebar-EN.php" ?>
+    <!-- Sidebar -->
+    <?php require_once "sidebar-GR.php" ?>
 
-        <!-- Page Content -->
-        <div id="content">
-            <?php require_once "navbar-EN.php" ?>
+    <!-- Page Content -->
+    <div id="content">
+        <?php require_once "navbar-GR.php" ?>
 
-            <div class="container mt-5 p-3" id="create-event-container">
-                <form id="create_event_form" action="create_event_script.php" method="post">
-                    <input type="text" class="form-control" name="classID" id="classID"
-                        value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="className">Class Name</label>
-                                <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>"
-                                    id="className" required readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="lectures">Lectures</label>
-                                <select class="form-select" name="lectureID" id="lectures" required>
-                                    <?php foreach ($lectures as $lecture) { ?>
-                                        <option value="<?php echo $lecture['id']; ?>">
-                                            <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+        <div class="container mt-5 p-3" id="create-event-container">
+            <form id="create_event_form" action="create_event_script.php" method="post">
+                <input type="text" class="form-control" name="classID" id="classID"
+                       value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="className">Όνομα Αίθουσας</label>
+                            <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>"
+                                   id="className" required readonly>
                         </div>
                     </div>
-
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="startDate">Start Date</label>
-                                <input type="date" class="form-control" name="startDate" value="<?php echo $startDate ?>" id="startDate" required readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="endDate">End Date</label>
-                                <input type="date" class="form-control" name="endDate" id="endDate">
-                            </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="lectures">Μαθήματα</label>
+                            <select class="form-select" name="lectureID" id="lectures" required>
+                                <?php foreach ($lectures as $lecture) { ?>
+                                    <option value="<?php echo $lecture['id']; ?>">
+                                        <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
+                </div>
 
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="startTime">Start Time</label>
-                                <input type="time" class="form-control" name="startTime" id="startTime" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
-                            </div>
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="startDate">Ημερομηνία Έναρξης</label>
+                            <input type="date" class="form-control" name="startDate" value="<?php echo $startDate ?>" id="startDate" required readonly>
                         </div>
                     </div>
-
-                    <div class="row g-3 my-3 daysOfWeek">
-                        <div class="col-md-6">
-                            <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
-                                <label class="form-check-label" for="recurring">Recurring</label>
-                            </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="endDate">Ημερομηνία Λήξης</label>
+                            <input type="date" class="form-control" name="endDate" id="endDate">
                         </div>
                     </div>
+                </div>
 
-                    <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
-
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <input type="file" name="file" class="form-control" id="fileUpload">
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="startTime">Ώρα Έναρξης</label>
+                            <input type="time" class="form-control" name="startTime" id="startTime" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="duration">Διάρκεια</label>
+                            <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="row my-3">
-                        <div class="col">
-                            <button type="button" class="btn btn-secondary btn-not" ><i
-                                    class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
-                            <button type="button" class="btn btn-secondary btn-not" onclick="clearForm()">Clear <i
+                <div class="row g-3 my-3 daysOfWeek">
+                    <div class="col-md-6">
+                        <div class="form-check my-3">
+                            <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
+                            <label class="form-check-label" for="recurring">Επαναλαμβανόμενη Κράτηση</label>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">Ή</h2>
+
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <input type="file" name="file" class="form-control" id="fileUpload">
+                    </div>
+                </div>
+
+                <div class="row my-3">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary btn-not" ><i
+                                    class="fas fa-long-arrow-alt-left mx-2"></i> Πίσω</button>
+                        <button type="button" class="btn btn-secondary btn-not" onclick="clearForm()">Εκκαθάριση Φόρμας<i
                                     class="fas fa-eraser"></i></button>
-                            <button type="submit" class="btn btn-primary">Submit <i
+                        <button type="submit" class="btn btn-primary">Υποβολή <i
                                     class="far fa-check-circle"></i></button>
-                        </div>
                     </div>
-                </form>
-            </div>
-
-
+                </div>
+            </form>
         </div>
+
+
     </div>
+</div>
 
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <!-- FullCalendar JS -->
-    <script src='fullcalendar/packages/core/main.js'></script>
-    <script src='fullcalendar/packages/interaction/main.js'></script>
-    <script src='fullcalendar/packages/daygrid/main.js'></script>
-    <script src='fullcalendar/packages/timegrid/main.js'></script>
-    <script src='fullcalendar/packages/list/main.js'></script>
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<!-- FullCalendar JS -->
+<script src='fullcalendar/packages/core/main.js'></script>
+<script src='fullcalendar/packages/interaction/main.js'></script>
+<script src='fullcalendar/packages/daygrid/main.js'></script>
+<script src='fullcalendar/packages/timegrid/main.js'></script>
+<script src='fullcalendar/packages/list/main.js'></script>
 
-    <script src='js/main.js'></script>
+<script src='js/main.js'></script>
 </body>
 
 </html>

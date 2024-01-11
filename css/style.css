@@ -246,20 +246,25 @@ input[type=checkbox]:checked {
 .sidebar ul li.active a {
   color: #fff;
 }
+.sidebar .sidebar-li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .sidebar .sidebar-li button{
-  display: block;
-  margin: 1em auto;
-  width: 100%;
   color: white;
   font-weight: 400;
   background-color: #2a2b38;
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;
-  padding: .5em .8em;
   text-transform: capitalize;
-  box-shadow: inset 0 0 .3em 1px white;
   scale: 1;
+}
+.sidebar .sidebar-li button i{
+  display: inline;
+  margin: 0 auto;
+  font-size: small;
 }
 .sidebar .sidebar-li button:hover{
   background-color: #2a2b38;

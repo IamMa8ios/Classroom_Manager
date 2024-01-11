@@ -25,29 +25,29 @@ $conn->close();
 //print_r($buildings);
 ?>
 
-<nav id="sidebar">
-    <div class="sidebar-header">
-        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100">
-        <h3>Πρόγραμμα Αιθουσών</h3>
+<nav class="sidebar">
+    <div class="sidebar-header text-center">
+        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100 rounded-3">
+        <a href="index-GR.php" class="text-wrap text-capitalize text-center">Προβολή Αιθουσών</a>
     </div>
 
     <ul class="list-unstyled components">
         <?php
-            foreach ($buildings as $building_name=>$classes){
-                $id=str_replace(' ', '', $building_name);
-        ?>
-        <li class="active">
-            <a href="#<?php echo $id; ?>" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><?php echo $building_name; ?></a>
-            <ul class="collapse list-unstyled" id='<?php echo $id; ?>'>
-                <?php foreach ($classes as $class){ ?>
-                <li>
-                    <form action="index-GR.php" method="post">
-                        <button class="btn btn-block" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
-                    </form>
-                </li>
-                <?php } ?>
-            </ul>
-        </li>
+        foreach ($buildings as $building_name=>$classes){
+            $id=str_replace(' ', '', $building_name);
+            ?>
+            <li class="active pb-2">
+                <a href="#<?php echo $id; ?>" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-capitalize"><strong><?php echo $building_name; ?></strong></a>
+                <ul class="collapse list-unstyled" id='<?php echo $id; ?>'>
+                    <?php foreach ($classes as $class){ ?>
+                        <li class="sidebar-li px-2">
+                            <form action="create_event-GR.php" method="post">
+                                <button class="btn" name="classroom" value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
+                            </form>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </li>
         <?php } ?>
     </ul>
 </nav>

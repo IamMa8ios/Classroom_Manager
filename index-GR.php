@@ -52,7 +52,9 @@ require_once "session_manager.php";
     <script src='fullcalendar/packages/timegrid/main.js'></script>
     <script src='fullcalendar/packages/list/main.js'></script>
 
+<!-- Edit & Delete Αιθουσα δεξια
 
+κατω απο separator create-new-class -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
