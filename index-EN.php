@@ -1,5 +1,7 @@
 <?php
 require_once "session_manager.php";
+
+//FIXME: Change white to login white-ish color
 ?>
 
 <!DOCTYPE html>

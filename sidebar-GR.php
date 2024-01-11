@@ -22,7 +22,6 @@ foreach ($result as $building){
     }
 }
 $conn->close();
-//print_r($buildings);
 ?>
 
 <nav class="sidebar">
