@@ -100,6 +100,12 @@ $maxStart = $maxStart->format('H:i:s');
                                 <input type="date" class="form-control" name="endDate" id="endDate">
                             </div>
                         </div>
+                        <div class="col-md-6" style="display: none">
+                            <div class="input-group">
+                                <label class="input-group-text" for="lostDate">Date Lost</label>
+                                <input type="date" class="form-control" name="lostDate" id="lostDate">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row g-3 my-3">
@@ -122,6 +128,15 @@ $maxStart = $maxStart->format('H:i:s');
                             <div class="form-check my-3">
                                 <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
                                 <label class="form-check-label" for="recurring">Recurring</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 my-3 daysOfWeek">
+                        <div class="col-md-6">
+                            <div class="form-check my-3">
+                                <input class="form-check-input" type="checkbox" name="recoupment" value="" id="recoupment" onclick="">
+                                <label class="form-check-label" for="recoupment">Recoupment</label>
                             </div>
                         </div>
                     </div>
