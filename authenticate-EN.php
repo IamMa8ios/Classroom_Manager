@@ -2,7 +2,6 @@
 require_once 'session_manager.php';
 require_once 'db_connector.php';
 
-//FIXME: Create GR page
 
 if ($_SESSION['role'] != 1) {
     header("Location: index-EN.php");
