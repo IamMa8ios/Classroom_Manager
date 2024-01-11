@@ -18,7 +18,17 @@ if(isset($_GET['date'])){
     $startDate=$_GET['date'];
 }
 
-//FIXME: Check if class is actually available for requested event
+$conn = connect2db();
+$stmt = $conn->prepare("select time_available_start as `start`, time_available_end as `end` from classroom where id = ?");
+$stmt->bind_param("i", $_SESSION['classID']);
+$stmt->execute();
+$time = $stmt->get_result()->fetch_assoc(); // get the mysqli result
+$conn->close();
+
+$minStart = $time['start'];
+$maxStart = DateTime::createFromFormat('H:i:s', $time['end']);
+$maxStart->modify('-1 hours');
+$maxStart = $maxStart->format('H:i:s');
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +106,7 @@ if(isset($_GET['date'])){
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="startTime">Start Time</label>
-                                <input type="time" class="form-control" name="startTime" id="startTime" required>
+                                <input type="time" class="form-control" name="startTime" id="startTime" min="<?php echo $minStart; ?>" max="<?php echo $maxStart; ?>" required>
                             </div>
                         </div>
                         <div class="col-md-6">

@@ -18,7 +18,17 @@ if(isset($_GET['date'])){
     $startDate=$_GET['date'];
 }
 
-//FIXME: Actual translation
+$conn = connect2db();
+$stmt = $conn->prepare("select time_available_start as `start`, time_available_end as `end` from classroom where id = ?");
+$stmt->bind_param("i", $_SESSION['classID']);
+$stmt->execute();
+$time = $stmt->get_result()->fetch_assoc(); // get the mysqli result
+$conn->close();
+
+$minStart = $time['start'];
+$maxStart = DateTime::createFromFormat('H:i:s', $time['end']);
+$maxStart->modify('-1 hours');
+$maxStart = $maxStart->format('H:i:s');
 ?>
 
 <!DOCTYPE html>
