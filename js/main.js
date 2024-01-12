@@ -36,8 +36,23 @@ function clearForm() {
     document.getElementById("startDate").value = startDate;
     document.getElementById("className").value = className;
 }
+function handleLabTheorySwitch() {
+    var checkbox = document.getElementById('lab-switch-toggle');
+    var element = document.getElementById('lab-capacity');
+
+    // Attach an event listener to the checkbox's change event
+    checkbox.addEventListener('change', function () {
+        // If the checkbox is checked, remove the 'visually-hidden' class
+        // If the checkbox is not checked, add the 'visually-hidden' class
+
+        if (checkbox.checked) element.classList.remove('visually-hidden')
+        else element.classList.add('visually-hidden')
+
+    });
+}
 // -------------------------------------------------- /timer button -------------------------------------------------- 
 
 // -------------------------------------------------- MAIN --------------------------------------------------
 // Start the timer when the page loads
 window.onload = startTimer();
+window.onload = handleLabTheorySwitch();

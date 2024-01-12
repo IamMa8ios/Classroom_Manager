@@ -1,7 +1,8 @@
 <?php
 require_once "session_manager.php";
 
-//FIXME: Change white to login white-ish color
+//FIXME: Change white to login white-ish color (done)
+//FIXME: put Edit btn in event (calendar)
 ?>
 
 <!DOCTYPE html>
@@ -76,11 +77,31 @@ require_once "session_manager.php";
                 events: {
                     url: 'reservation_loader_script.php?classroom=<?php echo $_POST["classroom"]; ?>',
                     dataType: 'json',
-                    type: "POST"
+                    type: "POST",
+                    color: "#1f2029"
                 },
                 dateClick: function (info) {
                     location.href = `create_event-EN.php?date=${info.dateStr}`;
-                }
+                },
+                eventRender: function (info) {
+                    // Customize the event rendering here
+                    var $eventElement = info.el;
+
+                    // Add a custom button with an icon
+                    var $editEventBtn = document.createElement('a');
+                    // $editEventBtn.classList.add('btn');
+                    $editEventBtn.style.color = 'white';
+                    $editEventBtn.innerHTML = '<i class="fas fa-edit"></i>'; // Example icon using Font Awesome
+
+                    // Add an event listener to the custom button
+                    $editEventBtn.addEventListener('click', function () {
+                        // Handle button click event
+                        alert('Custom button clicked for event: ' + info.event.title);
+                    });
+
+                    // Append the custom button to the event element
+                    $eventElement.appendChild($editEventBtn);
+                },
             });
 
             calendar.render();
