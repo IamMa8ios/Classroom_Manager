@@ -153,7 +153,7 @@ $maxStart = $maxStart->format('H:i:s');
                         <div class="col">
                             <button type="button" class="btn btn-secondary btn-not" ><i
                                     class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
-                            <button type="button" class="btn btn-secondary btn-not" onclick="clearForm()">Clear <i
+                            <button type="button" class="btn btn-secondary btn-not" onclick="clearEventForm()">Clear <i
                                     class="fas fa-eraser"></i></button>
                             <button type="submit" class="btn btn-primary">Submit <i
                                     class="far fa-check-circle"></i></button>
