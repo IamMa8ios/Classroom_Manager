@@ -170,7 +170,7 @@ if (isset($_POST['delete'])) {
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
                         <input class="lab-switch" type="checkbox" id="lab-switch-toggle" data-theory="Theory"
-                               data-lab="Lab">
+                               data-lab="Lab" onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')">
                     </div>
 
                     <div class="col-md-6">

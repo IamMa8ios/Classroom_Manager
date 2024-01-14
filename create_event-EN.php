@@ -135,8 +135,33 @@ $maxStart = $maxStart->format('H:i:s');
                     <div class="row g-3 my-3 daysOfWeek">
                         <div class="col-md-6">
                             <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" name="recoupment" value="" id="recoupment" onclick="">
+                                <input class="form-check-input" type="checkbox" name="recoupment" value="" id="recoupment" onclick="handleLabTheorySwitch('recoupment','recoupment-fields')">
                                 <label class="form-check-label" for="recoupment">Recoupment</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- hidden until Recoupment is checked-->
+<!--                    αναγνωριστικό αίτησης, ημερομηνία αίτησης, κατάσταση αίτησης (System auto)-->
+<!--                    αρχική κράτηση (lecture name, classname, user name) , ημερομηνία προς αναπλήρωση (προσδιορίζουν επακριβώς πότε δεν μπορεί να γίνει η διδασκαλία του μαθήματος)-->
+<!--                    ημερομηνία αναπλήρωσης, αίθουσα αναπλήρωσης,-->
+<!--                    ώρα αναπλήρωσης, και διάρκεια αναπλήρωσης-->
+                    <div class="row g-3 my-3 visually-hidden" id="recoupment-fields">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="duration">Duration</label>
+                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="duration">Duration</label>
+                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="duration">Duration</label>
+                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
                             </div>
                         </div>
                     </div>

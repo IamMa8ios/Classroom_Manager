@@ -36,9 +36,9 @@ function clearForm() {
     document.getElementById("startDate").value = startDate;
     document.getElementById("className").value = className;
 }
-function handleLabTheorySwitch() {
-    var checkbox = document.getElementById('lab-switch-toggle');
-    var element = document.getElementById('lab-capacity');
+function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
+    var checkbox = document.getElementById(checkBoxID);
+    var element = document.getElementById(hiddenElementID);
 
     // Attach an event listener to the checkbox's change event
     checkbox.addEventListener('change', function () {
@@ -55,4 +55,4 @@ function handleLabTheorySwitch() {
 // -------------------------------------------------- MAIN --------------------------------------------------
 // Start the timer when the page loads
 window.onload = startTimer();
-window.onload = handleLabTheorySwitch();
+// window.onload = handleLabTheorySwitch();
