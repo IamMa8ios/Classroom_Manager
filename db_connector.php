@@ -11,14 +11,14 @@ function connect2db(){
     if(isset($_SESSION['role'])){
         if($_SESSION['role']==1){
             $username="guest_user";
-        }else if($_SESSION['role']==2){
+        }elseif($_SESSION['role']==2){
             $username="teacher_user";
-        }else if($_SESSION['role']==3){
+        }elseif($_SESSION['role']==3){
             $username="booking_admin_user";
-        }else if($_SESSION['role']==4){
+        }elseif($_SESSION['role']==4){
             $username="teacher_admin_user";
         }
-    }else {
+    }else{
         $_SESSION['role']=1;
         $username="guest_user";
     }

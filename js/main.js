@@ -25,7 +25,7 @@ function formatTime(seconds) {
     var remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
-function clearForm() {
+function clearEventForm() {
     var classID = document.getElementById("classID").value;
     var startDate = document.getElementById("startDate").value;
     var className = document.getElementById("className").value;
@@ -49,6 +49,9 @@ function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
         else element.classList.add('visually-hidden')
 
     });
+}
+function clearClassForm() {
+    document.getElementById("create_class_form").reset();
 }
 // -------------------------------------------------- /timer button -------------------------------------------------- 
 

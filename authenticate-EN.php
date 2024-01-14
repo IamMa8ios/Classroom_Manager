@@ -80,6 +80,7 @@ if (isset($_POST['login'])) {
             $_SESSION['email'] = $row['email'];
             $_SESSION['dept'] = $row['department'];
             $_SESSION['userID'] = $row['id'];
+            $_SESSION['role'] = $row['roleID'];
             header("Location: index-EN.php");
         } else {
             echo "Invalid password";
