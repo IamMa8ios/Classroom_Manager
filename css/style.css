@@ -4,6 +4,7 @@
   --dark-purple: #1f2029;
   --light-purple: #302E3F;
   --white-ish: #D7D9CE;
+  --svg-background: #2a2b38;
 }
 
 html {
@@ -157,21 +158,24 @@ body {
 
 .sidebar,
 .navbar,
-#create-event-container {
-  background-color: #2a2b38;
+
+.bg-purple-svg{
+  background-color: var(--svg-background);
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: 300%;
 }
 
-#create-event-container {
+#create-event-container,
+#create-recoupment-container{
   border-radius: var(--bor-rad);
   backdrop-filter: blur(10px);
   color: var(--white-ish);
 }
 
-#create-event-container label:not(#create-event-container .daysOfWeek label) {
+#create-event-container label:not(#create-event-container #create-event + label),
+#create-recoupment-container label:not(#create-recoupment-container #recoupment + label){
   background-color: var(--dark-purple);
   color: var(--white-ish);
 }
@@ -257,7 +261,7 @@ input[type=checkbox]:checked {
 .sidebar .sidebar-li button{
   color: var(--white-ish);
   font-weight: 400;
-  background-color: #2a2b38;
+  background-color: var(--svg-background);
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;
@@ -270,7 +274,7 @@ input[type=checkbox]:checked {
   font-size: small;
 }
 .sidebar .sidebar-li button:hover{
-  background-color: #2a2b38;
+  background-color: var(--svg-background);
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;

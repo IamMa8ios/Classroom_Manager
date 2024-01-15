@@ -61,130 +61,142 @@ $maxStart = $maxStart->format('H:i:s');
         <div id="content">
             <?php require_once "navbar-EN.php" ?>
 
-            <div class="container mt-5 p-3" id="create-event-container">
-                <form id="create_event_form" action="create_event_script.php" method="post">
-                    <input type="text" class="form-control" name="classID" id="classID"
-                        value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="className">Class Name</label>
-                                <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>"
-                                    id="className" required readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="lectures">Lectures</label>
-                                <select class="form-select" name="lectureID" id="lectures" required>
-                                    <?php foreach ($lectures as $lecture) { ?>
-                                        <option value="<?php echo $lecture['id']; ?>">
-                                            <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+            <div class="container mt-5 bg-purple-svg" id="create-event-container">
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <div class="form-check my-3">
+                            <input class="form-check-input" type="checkbox" id="create-event" onclick="handleLabTheorySwitch('create-event','create-event-fields')">
+                            <label class="form-check-label" for="create-event">Create Event</label>
                         </div>
                     </div>
+                </div>
+                <div class="row visually-hidden" id="create-event-fields">
+                    <form id="create_event_form" action="create_event_script.php" method="post">
+                        <input type="text" class="form-control" name="classID" id="classID"
+                               value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
+                        <div class="row g-3 my-3">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="className">Class Name</label>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['className']; ?>"
+                                           id="className" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="lectures">Lectures</label>
+                                    <select class="form-select" name="lectureID" id="lectures" required>
+                                        <?php foreach ($lectures as $lecture) { ?>
+                                            <option value="<?php echo $lecture['id']; ?>">
+                                                <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="startDate">Start Date</label>
-                                <input type="date" class="form-control" name="startDate" value="<?php echo $startDate ?>" id="startDate" required readonly>
+                        <div class="row g-3 my-3">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="startDate">Start Date</label>
+                                    <input type="date" class="form-control" name="startDate" value="<?php echo $startDate ?>" id="startDate" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="endDate">End Date</label>
+                                    <input type="date" class="form-control" name="endDate" id="endDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="display: none">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="lostDate">Date Lost</label>
+                                    <input type="date" class="form-control" name="lostDate" id="lostDate">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="endDate">End Date</label>
-                                <input type="date" class="form-control" name="endDate" id="endDate">
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="display: none">
-                            <div class="input-group">
-                                <label class="input-group-text" for="lostDate">Date Lost</label>
-                                <input type="date" class="form-control" name="lostDate" id="lostDate">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="startTime">Start Time</label>
-                                <input type="time" class="form-control" name="startTime" id="startTime" min="<?php echo $minStart; ?>" max="<?php echo $maxStart; ?>" required>
+                        <div class="row g-3 my-3">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="startTime">Start Time</label>
+                                    <input type="time" class="form-control" name="startTime" id="startTime" min="<?php echo $minStart; ?>" max="<?php echo $maxStart; ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="duration">Duration</label>
+                                    <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row g-3 my-3 daysOfWeek">
-                        <div class="col-md-6">
-                            <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
-                                <label class="form-check-label" for="recurring">Recurring</label>
+                        <div class="row g-3 my-3 daysOfWeek">
+                            <div class="col-md-6">
+                                <div class="form-check my-3">
+                                    <input class="form-check-input" type="checkbox" name="recurring" value="" id="recurring">
+                                    <label class="form-check-label" for="recurring">Recurring</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row g-3 my-3 daysOfWeek">
-                        <div class="col-md-6">
-                            <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" name="recoupment" value="" id="recoupment" onclick="handleLabTheorySwitch('recoupment','recoupment-fields')">
-                                <label class="form-check-label" for="recoupment">Recoupment</label>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- hidden until Recoupment is checked-->
-<!--                    αναγνωριστικό αίτησης, ημερομηνία αίτησης, κατάσταση αίτησης (System auto)-->
-<!--                    αρχική κράτηση (lecture name, classname, user name) , ημερομηνία προς αναπλήρωση (προσδιορίζουν επακριβώς πότε δεν μπορεί να γίνει η διδασκαλία του μαθήματος)-->
-<!--                    ημερομηνία αναπλήρωσης, αίθουσα αναπλήρωσης,-->
-<!--                    ώρα αναπλήρωσης, και διάρκεια αναπλήρωσης-->
-                    <div class="row g-3 my-3 visually-hidden" id="recoupment-fields">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="duration">Duration</label>
-                                <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
-                            </div>
-                        </div>
-                    </div>
+                        <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
 
-                    <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
+                        <div class="row g-3 my-3">
+                            <div class="col-md-6">
+                                <input type="file" name="file" class="form-control" id="fileUpload">
+                            </div>
+                        </div>
 
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <input type="file" name="file" class="form-control" id="fileUpload">
+                        <div class="row my-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary btn-not" ><i
+                                            class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
+                                <button type="button" class="btn btn-secondary btn-not" onclick="clearEventForm()">Clear <i
+                                            class="fas fa-eraser"></i></button>
+                                <button type="submit" class="btn btn-primary">Submit <i
+                                            class="far fa-check-circle"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container mt-5 bg-purple-svg" id="create-recoupment-container">
+                <div class="row g-3 my-3">
+                    <div class="col-md-6">
+                        <div class="form-check my-3">
+                            <input class="form-check-input" type="checkbox" name="recoupment" value="" id="recoupment" onclick="handleLabTheorySwitch('recoupment','recoupment-fields')">
+                            <label class="form-check-label" for="recoupment">Recoupment</label>
                         </div>
                     </div>
-
-                    <div class="row my-3">
-                        <div class="col">
-                            <button type="button" class="btn btn-secondary btn-not" ><i
-                                    class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
-                            <button type="button" class="btn btn-secondary btn-not" onclick="clearEventForm()">Clear <i
-                                    class="fas fa-eraser"></i></button>
-                            <button type="submit" class="btn btn-primary">Submit <i
-                                    class="far fa-check-circle"></i></button>
+                </div>
+                <!-- hidden until Recoupment is checked-->
+                <!--                    αναγνωριστικό αίτησης, ημερομηνία αίτησης, κατάσταση αίτησης (System auto)-->
+                <!--                    αρχική κράτηση (lecture name, classname, user name) , ημερομηνία προς αναπλήρωση (προσδιορίζουν επακριβώς πότε δεν μπορεί να γίνει η διδασκαλία του μαθήματος)-->
+                <!--                    ημερομηνία αναπλήρωσης, αίθουσα αναπλήρωσης,-->
+                <!--                    ώρα αναπλήρωσης, και διάρκεια αναπλήρωσης-->
+                <div class="row g-3 my-3 bg-purple-svg visually-hidden" id="recoupment-fields">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="duration">Duration</label>
+                            <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
                         </div>
                     </div>
-                </form>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="duration">Duration</label>
+                            <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="duration">Duration</label>
+                            <input type="number" class="form-control" name="duration" id="duration" min="1" max="3" step="0.5" required>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

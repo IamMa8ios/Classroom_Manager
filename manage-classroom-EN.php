@@ -65,7 +65,7 @@ if (isset($_POST['edit'])) {
     <div id="content">
         <?php require_once "navbar-EN.php" ?>
 
-        <div class="container mt-5 p-3" id="create-event-container">
+        <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
             <form id="create_class_form" action="manage_class_script.php" method="post">
 
                 <div class="row g-3 my-3">
