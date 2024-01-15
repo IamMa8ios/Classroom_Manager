@@ -29,6 +29,8 @@ $minStart = $time['start'];
 $maxStart = DateTime::createFromFormat('H:i:s', $time['end']);
 $maxStart->modify('-1 hours');
 $maxStart = $maxStart->format('H:i:s');
+
+$navTitle="Creating New Event";
 ?>
 
 <!DOCTYPE html>

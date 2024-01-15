@@ -309,13 +309,12 @@ input[type=checkbox]:checked {
   color: var(--white-ish);
   cursor: pointer;
   font-weight: 600;
-  line-height: 1.5;
   margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, var(--white-ish));
   border-radius: 99rem;
-  border-width: 2px;
   overflow: hidden;
-  padding: 0.8em 1.2em;
+  padding: 0.5em 1em;
+  border: 2px solid var(--white-ish);
   position: relative;
 }
 .btn-slide [hidden] {
