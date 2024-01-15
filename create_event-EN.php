@@ -141,13 +141,6 @@ $maxStart = $maxStart->format('H:i:s');
                             </div>
                         </div>
 
-                        <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
-
-                        <div class="row g-3 my-3">
-                            <div class="col-md-6">
-                                <input type="file" name="file" class="form-control" id="fileUpload">
-                            </div>
-                        </div>
 
                         <div class="row my-3">
                             <div class="col">
@@ -160,6 +153,27 @@ $maxStart = $maxStart->format('H:i:s');
                             </div>
                         </div>
                     </form>
+
+                    <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
+
+                    <form enctype="multipart/form-data" action="mass-create-event.php" method="post">
+                        <div class="row g-3 my-3">
+                            <div class="col-md-6">
+                                <input type="file" name="file" class="form-control" id="fileUpload" accept=".csv">
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary btn-not" ><i
+                                            class="fas fa-long-arrow-alt-left mx-2"></i> Back</button>
+                                <button type="button" class="btn btn-secondary btn-not" onclick="clearEventForm()">Clear <i
+                                            class="fas fa-eraser"></i></button>
+                                <button type="submit" class="btn btn-primary">Submit <i
+                                            class="far fa-check-circle"></i></button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
 
