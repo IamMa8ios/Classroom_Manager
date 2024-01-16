@@ -161,7 +161,7 @@ $navTitle = "Creating New Event";
 
                 <h2 class="my-3 position-relative d-flex justify-content-center align-items-center">OR</h2>
 
-                <form enctype="multipart/form-data" id="create_event_from_file_form" action="mass-create-event.php"
+                <form enctype="multipart/form-data" id="create_event_from_file_form" action="mass_create_event_script.php"
                       method="post">
                     <div class="row g-3 my-3">
                         <div class="col-md-6">

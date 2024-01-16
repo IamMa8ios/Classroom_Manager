@@ -62,6 +62,7 @@ $conn->close();
             </li>
         <?php } ?>
     </ul>
+    <?php if($_SESSION['role']>1){ ?>
     <ul class="list-unstyled">
         <?php if($_SESSION['role']>2){ ?>
         <li class="sidebar-li px-2 my-3">
@@ -72,4 +73,5 @@ $conn->close();
             <a class="btn rounded-4" href="user-dashboard-EN.php">My Dashboard</a>
         </li>
     </ul>
+    <?php } ?>
 </nav>

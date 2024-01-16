@@ -106,6 +106,7 @@ if (isset($_POST['classroom'])) {
                 location.href = `create_event-EN.php?date=${info.dateStr}`;
             },
             <?php } ?>
+            <?php if($_SESSION['role']>2){ ?>
             eventRender: function (info) {
                 // Customize the event rendering here
                 var $eventElement = info.el;
@@ -124,7 +125,8 @@ if (isset($_POST['classroom'])) {
 
                 // Append the custom button to the event element
                 $eventElement.appendChild($editEventBtn);
-            },
+            }
+            <?php } ?>
         });
 
         calendar.render();
