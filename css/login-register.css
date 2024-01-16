@@ -5,12 +5,20 @@
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
+:root {
+  --bor-rad: 15px;
+  --dark-purple: #1f2029;
+  --light-purple: #302E3F;
+  --white-ish: #D7D9CE;
+  --svg-background: #2a2b38;
+}
+
 body{
 	font-family: 'Poppins', sans-serif;
 	font-weight: 300;
 	font-size: 15px;
 	line-height: 1.7;
-	color: #c4c3ca;
+	color: var(--white-ish);
 	background-color: #1f2029;
 	overflow-x: hidden;
 }
