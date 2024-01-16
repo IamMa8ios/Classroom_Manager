@@ -2,7 +2,8 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-$title = "Creating new Class";
+$title = "User Management";
+$navTitle = $title;
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +36,8 @@ $title = "Creating new Class";
     <div id="content">
         <?php require_once "navbar-EN.php" ?>
 
-        <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
-            <table id="example" class="table table-striped" style="width:100%">
+        <div class="container mt-5 p-3 bg-purple-svg rounded-4">
+            <table id="dataTable" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -528,7 +529,7 @@ $title = "Creating new Class";
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
-<script>new DataTable('#example');</script>
+<script>new DataTable('#dataTable');</script>
 <script src='js/main.js'></script>
 </body>
 

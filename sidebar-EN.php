@@ -57,4 +57,15 @@ $conn->close();
             </li>
         <?php } ?>
     </ul>
+    <ul class="list-unstyled">
+        <li class="sidebar-li px-2 my-3">
+            <a class="btn rounded-4" href="#">New Classroom</a>
+        </li>
+        <li class="sidebar-li px-2 my-3">
+            <a class="btn rounded-4" href="manage-users-EN.php">Users</a>
+        </li>
+        <li class="sidebar-li px-2 my-3">
+            <a class="btn rounded-4" href="#">Recoupments</a>
+        </li>
+    </ul>
 </nav>

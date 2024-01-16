@@ -1,5 +1,4 @@
 :root {
-  --clr-primary: lightblue;
   --bor-rad: 15px;
   --dark-purple: #1f2029;
   --light-purple: #302E3F;
@@ -146,19 +145,13 @@ body {
 }
 
 .navbar {
-  background-color: #343a40;
   border-radius: var(--bor-rad);
   color: var(--white-ish);
 }
 
-.navbar button,
-.navbar a {
-  min-height: 3em;
-}
 
 .sidebar,
 .navbar,
-
 .bg-purple-svg{
   background-color: var(--svg-background);
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
@@ -204,8 +197,9 @@ input[type=checkbox]:checked {
 }
 
 .sidebar {
+  position: relative;
   width: 250px;
-  height: 100vh;
+  min-height: 100vh;
   color: var(--white-ish);
   transition: all 0.3s;
 }
@@ -223,16 +217,17 @@ input[type=checkbox]:checked {
   color: var(--white-ish);
   padding: 10px;
 }
+.sidebar .sidebar-li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
 .sidebar ul li a {
   padding: 10px;
   font-size: 1.1em;
   display: block;
-  color: #818181;
-}
-
-
-.sidebar ul li a:hover {
   color: var(--white-ish);
 }
 
@@ -400,4 +395,23 @@ input.lab-switch:checked::after {
   content: attr(data-lab);
   left: 0.8rem;
   color: #f5f5f7;
+}
+/*  ====================================================== DataTable ====================================================== */
+#dataTable_wrapper *{
+  color: var(--white-ish);
+}
+#dataTable_wrapper label{
+  border-radius: var(--bor-rad);
+  background: var(--dark-purple);
+  padding: .5em 1em;
+}
+#dataTable_wrapper select{
+  background: var(--white-ish);
+  color: var(--dark-purple);
+}
+#dataTable_wrapper select option{
+  color: var(--dark-purple);
+}
+#dataTable_wrapper .pagination .pagination_button{
+  background-color: red !important;
 }
