@@ -38,7 +38,7 @@ if (isset($_POST['logout'])) {
                         <a href="authenticate-EN.php" class="btn-slide"><span>Login / Register</span></a> <!-- FIXME: GR  page too (class="btn-slide")-->
                     <?php } else { ?>
                         <form action="navbar-EN.php" method="POST">
-                            <button name="logout" value="logout" class="btn-slide"><span>Logout</span></button>
+                            <button name="logout" value="logout" class="btn-slide"><span><i class="fas fa-sign-out-alt"></i> Logout: <?php echo $_SESSION['name']; ?></span></button>
                         </form>
                     <?php } ?>
                 </li>

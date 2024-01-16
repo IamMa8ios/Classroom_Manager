@@ -2,14 +2,14 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-if($_SESSION['role']==1){
+if ($_SESSION['role'] == 1) {
     header("Location: index-EN.php");
 }
 
 $title = "My Dashboard";
 $navTitle = $title;
 
-if($_SESSION['role']!=2) {
+if ($_SESSION['role'] != 2) {
 
     $conn = connect2db();
     $stmt = $conn->prepare("select id, name, email, department, roleID from user");
@@ -56,8 +56,8 @@ $recoupmentStatus[] = "Submitted";
 $recoupmentStatus[] = "Approved";
 $recoupmentStatus[] = "Denied";
 
-//FIXME: Customize table action buttons
-//FIXME: Dynamic modal for deny button + notes
+//FIXME: Customize table action buttons (done)
+//FIXME: Dynamic modal for deny button + notes (done)
 //FIXME: Recoupments for each teacher
 ?>
 
@@ -91,54 +91,59 @@ $recoupmentStatus[] = "Denied";
     <div id="content">
         <?php require_once "navbar-EN.php" ?>
 
-        <?php if($_SESSION['role']==4){ ?>
-        <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
+        <?php if ($_SESSION['role'] == 4) { ?>
+            <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
 
-            <h2 class="my-3">Users</h2>
+                <h2 class="my-3">Users</h2>
 
-            <table id="dataTable" class="table table-striped" style="width:100%">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <?php foreach ($users as $user) { ?>
+                <table id="dataTable" class="table table-striped" style="width:100%">
+                    <thead>
                     <tr>
-                        <td><?php echo $user['name']; ?></td>
-                        <td><?php echo $user['email']; ?></td>
-                        <td><?php echo $user['department']; ?></td>
-                        <td><?php foreach ($roles as $role){
-                            if($role['id']==$user['roleID']){
-                                echo $role['name'];
-                                break;
-                            }
-                            } ?></td>
-                        <td>
-                            <a href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=1">Edit</a>
-                            <a href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=2">Delete</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Actions</th>
                     </tr>
-                <?php } ?>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-                </tfoot>
-            </table>
+                    <?php foreach ($users as $user) { ?>
+                        <tr>
+                            <td><?php echo $user['name']; ?></td>
+                            <td><?php echo $user['email']; ?></td>
+                            <td><?php echo $user['department']; ?></td>
+                            <td><?php foreach ($roles as $role) {
+                                    if ($role['id'] == $user['roleID']) {
+                                        echo $role['name'];
+                                        break;
+                                    }
+                                } ?></td>
+                            <td>
+                                <a class="btn rounded-4" id="edit-a"
+                                   href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=1"><i
+                                            class="fas fa-edit me-2"></i>Edit</a>
+                                <a class="btn rounded-4" id="delete-a"
+                                   href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=2"><i
+                                            class="fas fa-trash-alt me-2"></i>Delete</a>
 
-        </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
         <?php } ?>
         <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
 
@@ -168,18 +173,26 @@ $recoupmentStatus[] = "Denied";
                         <td><?php echo $recoupment['request_start']; ?></td>
                         <td><?php echo $recoupment['date_lost']; ?></td>
                         <td><?php echo $recoupment['date_recouped']; ?></td>
-                        <td><?php foreach ($allClasses as $class){
-                            if($class['id']==$recoupment['classroomID']){
-                                echo $class['name'];
-                                break;
-                            }
-                        } ?></td>
+                        <td><?php foreach ($allClasses as $class) {
+                                if ($class['id'] == $recoupment['classroomID']) {
+                                    echo $class['name'];
+                                    break;
+                                }
+                            } ?></td>
                         <td><?php echo $recoupment['start_time']; ?></td>
                         <td><?php echo $recoupment['duration']; ?> hour(s)</td>
-                        <td><?php echo $recoupment['notes']; ?></td>
                         <td>
-                            <a href="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=1">Approve</a>
-                            <a href="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=2">Deny</a>
+                            <button id="edit-a" class="btn rounded-4" data-bs-toggle="modal"
+                                    data-bs-target=".view-notes-modal"><i class="far fa-eye me-2"></i>View
+                            </button>
+                        </td>
+                        <td>
+                            <a class="btn rounded-4" id="edit-a"
+                               href="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=1"><i
+                                        class="fas fa-check-circle me-2"></i>Approve</a>
+                            <a class="btn rounded-4" id="delete-a" data-bs-toggle="modal"
+                               data-bs-target=".denyBtn-modal"><i
+                                        class="fas fa-trash-alt me-2"></i>Deny</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -205,6 +218,59 @@ $recoupmentStatus[] = "Denied";
 
     </div>
 
+</div>
+
+<!-- denyBtn Modal -->
+<div class="modal fade denyBtn-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <form action="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=2" method="get">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Reason for Denying the Request</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Textarea 8 rows height -->
+                    <div class="form-outline">
+                        <textarea class="form-control" id="textAreaExample2" rows="8"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle"></i>Close
+                    </button>
+                    <button type="submit" class="btn"><i class="far fa-check-circle"></i>Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- View Notes Modal -->
+<div class="modal fade view-notes-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <form action="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=2" method="get">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Notes</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Textarea 8 rows height -->
+                    <div class="form-outline">
+                        <!-- FIXME: perfect $recoupment['notes'] -->
+                        <textarea class="form-control" id="textAreaExample2" readonly
+                                  rows="8"><?php echo $recoupment['notes'] ?></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle me-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 

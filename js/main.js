@@ -56,6 +56,9 @@ function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
 function clearClassForm() {
     document.getElementById("create_class_form").reset();
 }
+function clearRecoupmentForm() {
+    document.getElementById("recoupment_form").reset();
+}
 // -------------------------------------------------- /timer button -------------------------------------------------- 
 
 // -------------------------------------------------- MAIN --------------------------------------------------

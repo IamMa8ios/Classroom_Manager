@@ -3,7 +3,6 @@ require_once "session_manager.php";
 require_once "db_connector.php";
 
 //FIXME: Change white to login white-ish color (done)
-//FIXME: put Edit btn in event (calendar)
 
 $navTitle = "";
 
