@@ -36,6 +36,9 @@ function clearEventForm() {
     document.getElementById("startDate").value = startDate;
     document.getElementById("className").value = className;
 }
+function clearEventFileForm() {
+    document.getElementById("create_event_from_file_form").reset();
+}
 function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
     var checkbox = document.getElementById(checkBoxID);
     var element = document.getElementById(hiddenElementID);

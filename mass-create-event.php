@@ -25,18 +25,15 @@ if (isset($_FILES['file'])) {
 
         // Read the CSV file contents, ignoring the first row
         $data = array();
-        $firstRowSkipped = false;
+        $linesAdded=0;
 
         if (($handle = fopen($uploadFile, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-                // Skip the first row
-                if (!$firstRowSkipped) {
-                    $firstRowSkipped = true;
-                    continue;
-                }
 
+            $labels = fgetcsv($handle, 1000, ',');
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                 $data[] = $row;
             }
+
             fclose($handle);
         }
 
