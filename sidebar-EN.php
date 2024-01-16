@@ -8,6 +8,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result(); // get the mysqli result
 
+$allClasses=[];
 foreach ($result as $building) {
 
     $sql = "select name, id from classroom where building=?";
@@ -19,7 +20,9 @@ foreach ($result as $building) {
     $buildings[$building['name']] = array();
     while ($classroom = $classrooms->fetch_assoc()) {
         array_push($buildings[$building['name']], $classroom);
+        $allClasses[]=$classroom;
     }
+
 }
 $conn->close();
 ?>
@@ -46,10 +49,12 @@ $conn->close();
                                 <button class="btn" name="classroom"
                                         value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
                             </form>
+                            <?php if($_SESSION['role']>2){ ?>
                             <form action="manage-classroom-EN.php" method="post">
                                 <button class="btn" name="edit" title="Edit" value="<?php echo $class['id']; ?>"><i class="fas fa-edit"></i></button>
                                 <button class="btn" name="delete" title="Delete" value="<?php echo $class['id']; ?>"><i class="fas fa-trash-alt"></i></button>
                             </form>
+                            <?php } ?>
                         </li>
 
                     <?php } ?>
@@ -58,14 +63,13 @@ $conn->close();
         <?php } ?>
     </ul>
     <ul class="list-unstyled">
+        <?php if($_SESSION['role']>2){ ?>
         <li class="sidebar-li px-2 my-3">
             <a class="btn rounded-4" href="#">New Classroom</a>
         </li>
+        <?php } ?>
         <li class="sidebar-li px-2 my-3">
-            <a class="btn rounded-4" href="manage-users-EN.php">Users</a>
-        </li>
-        <li class="sidebar-li px-2 my-3">
-            <a class="btn rounded-4" href="#">Recoupments</a>
+            <a class="btn rounded-4" href="user-dashboard-EN.php">My Dashboard</a>
         </li>
     </ul>
 </nav>

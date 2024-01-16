@@ -32,7 +32,7 @@ if (isset($_POST['edit'])) {
 //        header("Location: index-EN.php");
 //    }
 //}
-
+$navTitle=$title;
 ?>
 
 <!DOCTYPE html>
@@ -68,10 +68,12 @@ if (isset($_POST['edit'])) {
         <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
             <form id="create_class_form" action="manage_class_script.php" method="post">
 
+                <?php if(isset($_POST['edit'])){ ?>
                 <div class="input-group ">
                     <input type="text" style="display: none" class="form-control" name="classID" value="<?php echo $_POST['edit']; ?>"
                            id="classID">
                 </div>
+                <?php } ?>
 
                 <div class="row g-3 my-3">
                     <div class="col-md-6">

@@ -101,9 +101,11 @@ if (isset($_POST['classroom'])) {
                 type: "POST",
                 color: "#1f2029"
             },
+            <?php if($_SESSION['role']!=1){ ?>
             dateClick: function (info) {
                 location.href = `create_event-EN.php?date=${info.dateStr}`;
             },
+            <?php } ?>
             eventRender: function (info) {
                 // Customize the event rendering here
                 var $eventElement = info.el;
@@ -117,7 +119,7 @@ if (isset($_POST['classroom'])) {
                 // Add an event listener to the custom button
                 $editEventBtn.addEventListener('click', function () {
                     // Handle button click event
-                    alert('Custom button clicked for event: ' + info.event.title);
+                    alert('Custom button clicked for event: ' + info.event.title); //FIXME: Redirect to edit event
                 });
 
                 // Append the custom button to the event element
