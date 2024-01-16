@@ -1,4 +1,5 @@
 <?php
+require_once "db_connector.php";
 
 // Check if a file was uploaded
 if (isset($_FILES['file'])) {
@@ -38,9 +39,28 @@ if (isset($_FILES['file'])) {
         }
 
         // Display the data
+        print_r($labels);
         echo '<pre>';
         print_r($data);
         echo '</pre>';
+
+
+//        foreach ($data as $datum){
+//            $conn=connect2db();
+//            $stmt = $conn->prepare("insert into reservation(userID, repeatable, classroomID, lectureID,
+//                        start_date, end_date, start_time, duration, day_of_week) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+//            $dayOfWeek=null;
+//            if($datum[0]){
+//                $unixTimestamp = strtotime($datum[4]);
+//                $dayOfWeek = date("w", $unixTimestamp);
+//            }
+//            $stmt->bind_param("iisiisssi", $_SESSION['userID'], $datum[0], $datum[1], $datum[2], $datum[3], $datum[4], $datum[5], $datum[6], $datum[7], dayOfWeek);
+//            $stmt->execute();
+//            $conn->close();
+//        }
+//
+//        exit();
+
     } else {
         echo "Upload failed.\n";
     }
