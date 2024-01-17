@@ -113,7 +113,7 @@ $navTitle=$title;
                     <div class="col-md-6">
                         <div class="input-group">
                             <label class="input-group-text" for="capacity">Capacity</label>
-                            <input type="number" class="form-control" name="capacity" id="capacity"
+                            <input type="number" class="form-control" name="capacity" id="capacity" onclick="handleLabTheorySwitch('capacity','')"
                                    value="<?php echo $capacity; ?>" min="5" max="150" step="1" required>
                         </div>
                     </div>
@@ -188,7 +188,7 @@ $navTitle=$title;
                 <?php //FIXME:load "computers" on edit if class is a lab ?>
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
-                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" data-theory="Theory"
+                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')" data-theory="Theory"
                                data-lab="Lab" <?php if (!$type) { echo "checked";} ?>>
                     </div>
 
