@@ -35,7 +35,7 @@ if (isset($_POST['logout'])) {
                 </li>
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
-                        <a href="authenticate-EN.php" class="btn-slide"><span>Login / Register</span></a> <!-- FIXME: GR  page too (class="btn-slide")-->
+                        <a href="authenticate-EN.php" class="btn-slide"><span>Login / Register</span></a>
                     <?php } else { ?>
                         <form action="navbar-EN.php" method="POST">
                             <button name="logout" value="logout" class="btn-slide"><span><i class="fas fa-sign-out-alt"></i> Logout: <?php echo $_SESSION['name']; ?></span></button>

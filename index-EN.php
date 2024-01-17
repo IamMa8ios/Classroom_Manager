@@ -2,8 +2,6 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-//FIXME: Change white to login white-ish color (done)
-
 $navTitle = "";
 
 if (isset($_POST['classroom'])) {
@@ -63,6 +61,7 @@ if (isset($_POST['classroom'])) {
             echo "Please select a classroom from the menu on the left";
         } ?>
     </div>
+    <input class="visually-hidden" id="hidden-userID" value="*test id*">
 </div>
 
 <!-- Bootstrap JS, Popper.js, and jQuery -->
@@ -113,13 +112,27 @@ if (isset($_POST['classroom'])) {
                 // Add a custom button with an icon
                 var $editEventBtn = document.createElement('a');
                 // $editEventBtn.classList.add('btn');
-                $editEventBtn.style.color = 'white';
+                $editEventBtn.style.color = 'var(--white-ish)';
                 $editEventBtn.innerHTML = '<i class="fas fa-edit"></i>'; // Example icon using Font Awesome
 
                 // Add an event listener to the custom button
                 $editEventBtn.addEventListener('click', function () {
-                    // Handle button click event
-                    alert('Custom button clicked for event: ' + info.event.title); //FIXME: Redirect to edit event
+                    //FIXME: Redirect to edit event (done)
+                    // Create a form element
+                    var form = document.createElement('form');
+                    form.method = 'post';
+                    form.action = 'edit-event-EN.php';
+
+                    // Create input fields and add them to the form
+                    var userID = document.querySelector('#hidden-userID');
+                    var eventID = document.createElement('input');
+                    eventID.type = 'hidden';
+                    eventID.name = 'eventID';
+                    eventID.value = userID.value;
+                    form.appendChild(eventID);
+                    document.body.appendChild(form);
+
+                    form.submit();
                 });
 
                 // Append the custom button to the event element

@@ -8,7 +8,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result(); // get the mysqli result
 
-$allClasses=[];
+$allClasses = [];
 foreach ($result as $building) {
 
     $sql = "select name, id from classroom where building=?";
@@ -20,17 +20,19 @@ foreach ($result as $building) {
     $buildings[$building['name']] = array();
     while ($classroom = $classrooms->fetch_assoc()) {
         array_push($buildings[$building['name']], $classroom);
-        $allClasses[]=$classroom;
+        $allClasses[] = $classroom;
     }
 
 }
 $conn->close();
 ?>
 
-<nav class="sidebar">
+<nav class="sidebar rounded-right">
     <div class="sidebar-header text-center">
-        <img src="img/img-logo.png" alt="aegean" class="img-fluid mx-auto d-block object-fit-cover w-100 rounded-3">
-        <a href="index-EN.php" class="text-wrap text-capitalize text-center">View Class Schedule</a>
+        <a href="index-EN.php" class="text-wrap text-capitalize text-center fw-bold"><img src="img/img-logo.png"
+                                                                                          alt="aegean"
+                                                                                          class="img-fluid mx-auto d-block object-fit-cover w-100 rounded-3">View
+            Class Schedule<br>HOME</a>
     </div>
 
     <ul class="list-unstyled components">
@@ -49,11 +51,14 @@ $conn->close();
                                 <button class="btn" name="classroom"
                                         value="<?php echo $class['id']; ?>"><?php echo $class['name']; ?></button>
                             </form>
-                            <?php if($_SESSION['role']>2){ ?>
-                            <form action="manage-classroom-EN.php" method="post">
-                                <button class="btn" name="edit" title="Edit" value="<?php echo $class['id']; ?>"><i class="fas fa-edit"></i></button>
-                                <button class="btn" name="delete" title="Delete" value="<?php echo $class['id']; ?>"><i class="fas fa-trash-alt"></i></button>
-                            </form>
+                            <?php if ($_SESSION['role'] > 2) { ?>
+                                <form action="manage-classroom-EN.php" method="post">
+                                    <button class="btn" name="edit" title="Edit" value="<?php echo $class['id']; ?>"><i
+                                                class="fas fa-edit"></i></button>
+                                    <button class="btn" name="delete" title="Delete"
+                                            value="<?php echo $class['id']; ?>"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             <?php } ?>
                         </li>
 
@@ -62,16 +67,16 @@ $conn->close();
             </li>
         <?php } ?>
     </ul>
-    <?php if($_SESSION['role']>1){ ?>
-    <ul class="list-unstyled">
-        <?php if($_SESSION['role']>2){ ?>
-        <li class="sidebar-li px-2 my-3">
-            <a class="btn rounded-4" href="#">New Classroom</a>
-        </li>
-        <?php } ?>
-        <li class="sidebar-li px-2 my-3">
-            <a class="btn rounded-4" href="user-dashboard-EN.php">My Dashboard</a>
-        </li>
-    </ul>
+    <?php if ($_SESSION['role'] > 1) { ?>
+        <ul class="list-unstyled">
+            <?php if ($_SESSION['role'] > 2) { ?>
+                <li class="sidebar-li px-2 my-3">
+                    <a class="btn rounded-4" href="#">New Classroom</a>
+                </li>
+            <?php } ?>
+            <li class="sidebar-li px-2 my-3">
+                <a class="btn rounded-4" href="user-dashboard-EN.php">My Dashboard</a>
+            </li>
+        </ul>
     <?php } ?>
 </nav>
