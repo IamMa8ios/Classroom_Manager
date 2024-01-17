@@ -52,22 +52,19 @@ if ($_SESSION['role'] > 2) {
             $locked = 0;
         }
 
-        if (isset($_POST['action']) && strcmp($_POST['action'], "create") == 0) {
+        $conn = connect2db();
+        $sql="";
+
+        if(isset($_POST['edit'])){
+            $sql = "update classroom set name=?, building=?, capacity=?, time_available_start=?, time_available_end=?, " .
+                "days_available=?, type=?, computers=?, projector=?, locked=? where id=".$_POST['edit'];
+        }elseif(isset($_POST['create'])){
             $sql = "insert into classroom (name, building, capacity, time_available_start, time_available_end, " .
                 "days_available, type, computers, projector, locked) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            $conn = connect2db();
-            $stmt = $conn->prepare($sql);
-        } elseif (isset($_POST['action']) && strcmp($_POST['action'], "edit") == 0) {
-
-            $sql = "update classroom set name=?, building=?, capacity=?, time_available_start=?, time_available_end=?, " .
-                "days_available=?, type=?, computers=?, projector=?, locked=? where id=?";
-            $conn = connect2db();
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssisssiiiii", $_POST['name'], $_POST['building'], $_POST['capacity'], $_POST['startTime'],
-                $_POST['endTime'], $daysOfWeek, $type, $_POST['computers'], $projector, $locked, $_POST['classID']);
-
         }
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssisssiiii", $_POST['name'], $_POST['building'], $_POST['capacity'], $_POST['startTime'],
+            $_POST['endTime'], $daysOfWeek, $type, $_POST['computers'], $projector, $locked);
 
         if ($stmt->execute()) {
             if (strcmp($_POST['action'], "create") == 0) {

@@ -55,9 +55,6 @@ $conn->close();
                                 <form action="manage-classroom-EN.php" method="post">
                                     <button class="btn" name="edit" title="Edit" value="<?php echo $class['id']; ?>"><i
                                                 class="fas fa-edit"></i></button>
-                                    <button class="btn" name="delete" title="Delete"
-                                            value="<?php echo $class['id']; ?>"><i class="fas fa-trash-alt"></i>
-                                    </button>
                                 </form>
                             <?php } ?>
                         </li>
@@ -71,7 +68,7 @@ $conn->close();
         <ul class="list-unstyled">
             <?php if ($_SESSION['role'] > 2) { ?>
                 <li class="sidebar-li px-2 my-3">
-                    <a class="btn rounded-4" href="#">New Classroom</a>
+                    <a class="btn rounded-4" href="manage-classroom-EN.php">New Classroom</a>
                 </li>
             <?php } ?>
             <li class="sidebar-li px-2 my-3">

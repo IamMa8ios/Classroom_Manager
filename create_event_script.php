@@ -10,15 +10,16 @@ if(!isset($_SESSION)){
 
 require_once "db_connector.php";
 
-function sanitize($data)
-{
+function sanitize($data){
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
 $classID = $userID = $lectureID = $dayOfWeek = $startTime = $duration = $startDate = $endDate = "";
 $params = array();
 
-if (isset($_SESSION['userID'])) {
+if(isset($_POST['teacher'])){
+    $userID = sanitize($_POST['teacher']);
+}elseif (isset($_SESSION['userID'])) {
     $userID = sanitize($_SESSION['userID']);
 } else {
     echo "user id not set";
@@ -63,7 +64,13 @@ if (isset($_POST['recurring'])) {
         $dayOfWeek = "[" . date('w', strtotime(sanitize($_POST['startDate']))) . "]";
         $endDate=sanitize($_POST['endDate']);
 
-        $stmt = $conn->prepare("insert into reservation(userID, classroomID, lectureID, repeatable, start_date, end_date, day_of_week, start_time, duration) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $sql="";
+        if(isset($_POST['edit'])){
+            $sql="update reservation set userID=?, classroomID=?, lectureID=?, repeatable=?, start_date=?, end_date=?, day_of_week=?, start_time=?, duration=? where id=".$_POST['edit'];
+        }else{
+            $sql="insert into reservation(userID, classroomID, lectureID, repeatable, start_date, end_date, day_of_week, start_time, duration) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        }
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("iiiissssi", $userID, $classID, $lectureID, $repeatable, $startDate, $endDate, $dayOfWeek, $startTime, $duration);
 
     } else {
@@ -72,7 +79,13 @@ if (isset($_POST['recurring'])) {
 
 } else {
     $repeatable = false;
-    $stmt = $conn->prepare("insert into reservation(userID, classroomID, lectureID, start_date, start_time, duration) values(?, ?, ?, ?, ?, ?)");
+    $sql="";
+    if(isset($_POST['edit'])){
+        $sql="update reservation set userID=?, classroomID=?, lectureID=?, start_date=?, start_time=?, duration=? where id=".$_POST['edit'];
+    }else{
+        $sql="insert into reservation(userID, classroomID, lectureID, start_date, start_time, duration) values(?, ?, ?, ?, ?, ?)";
+    }
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("iiissi", $userID, $classID, $lectureID, $startDate, $startTime, $duration);
 }
 

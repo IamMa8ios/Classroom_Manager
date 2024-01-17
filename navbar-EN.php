@@ -1,5 +1,6 @@
 <?php
-if (isset($_POST['logout'])) {
+//FIXME: On timeout actually logout
+if (isset($_POST['logout']) || isset($_GET['logout'])) {
     session_start();
     session_destroy();
     header('Location: index-EN.php');

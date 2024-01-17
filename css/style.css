@@ -494,3 +494,21 @@ input.lab-switch:checked::after {
 .modal-footer button[type="submit"]:hover .far {
     color: forestgreen;
 }
+.Pending,
+.Approved,
+.Denied{
+    position: relative;
+    min-width: fit-content;
+}
+.Pending{
+    box-shadow: inset 0 0 .2em darkorange;
+    color: darkorange;
+}
+.Approved{
+    box-shadow: inset 0 0 .2em forestgreen;
+    color: forestgreen;
+}
+.Denied{
+    box-shadow: inset 0 0 .2em darkred;
+    color: darkred;
+}

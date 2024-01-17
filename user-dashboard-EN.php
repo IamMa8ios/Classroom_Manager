@@ -52,13 +52,11 @@ while ($recoupment = $result->fetch_assoc()) {
 }
 $conn->close();
 
-$recoupmentStatus[] = "Submitted";
+//FIXME: Change status color accordingly
+$recoupmentStatus[] = "Pending";
 $recoupmentStatus[] = "Approved";
 $recoupmentStatus[] = "Denied";
 
-//FIXME: Customize table action buttons (done)
-//FIXME: Dynamic modal for deny button + notes (done)
-//FIXME: Recoupments for each teacher
 ?>
 
 <!DOCTYPE html>
@@ -121,10 +119,10 @@ $recoupmentStatus[] = "Denied";
                                 } ?></td>
                             <td>
                                 <a class="btn rounded-4" id="edit-a"
-                                   href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=1"><i
+                                   href="user-profile-EN.php?userID=<?php echo $user['id']; ?>&action=1"><i
                                             class="fas fa-edit me-2"></i>Edit</a>
                                 <a class="btn rounded-4" id="delete-a"
-                                   href="manage-user-EN.php?userID=<?php echo $user['id']; ?>&action=2"><i
+                                   href="user-profile-EN.php?userID=<?php echo $user['id']; ?>&action=2"><i
                                             class="fas fa-trash-alt me-2"></i>Delete</a>
 
                             </td>
@@ -161,7 +159,9 @@ $recoupmentStatus[] = "Denied";
                     <th>Start Time</th>
                     <th>Duration</th>
                     <th>Notes</th>
+                    <?php if($_SESSION['role']==3){ ?>
                     <th>Actions</th>
+                    <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -169,7 +169,7 @@ $recoupmentStatus[] = "Denied";
                 <?php foreach ($recoupments as $recoupment) { ?>
                     <tr>
                         <td><?php echo $recoupment['id']; ?></td>
-                        <td><?php echo $recoupmentStatus[$recoupment['status']]; ?></td>
+                        <td class="<?php echo $recoupmentStatus[$recoupment['status']]; ?>"><?php echo $recoupmentStatus[$recoupment['status']]; ?></td>
                         <td><?php echo $recoupment['request_start']; ?></td>
                         <td><?php echo $recoupment['date_lost']; ?></td>
                         <td><?php echo $recoupment['date_recouped']; ?></td>
@@ -186,6 +186,8 @@ $recoupmentStatus[] = "Denied";
                                     data-bs-target=".view-notes-modal"><i class="far fa-eye me-2"></i>View
                             </button>
                         </td>
+
+                        <?php if($_SESSION['role']==3){ ?>
                         <td>
                             <a class="btn rounded-4" id="edit-a"
                                href="manage-recoupment-EN.php?userID=<?php echo $recoupment['id']; ?>&action=1"><i
@@ -194,6 +196,8 @@ $recoupmentStatus[] = "Denied";
                                data-bs-target=".denyBtn-modal"><i
                                         class="fas fa-trash-alt me-2"></i>Deny</a>
                         </td>
+
+                        <?php } ?>
                     </tr>
                 <?php } ?>
 
@@ -209,7 +213,9 @@ $recoupmentStatus[] = "Denied";
                     <th>Start Time</th>
                     <th>Duration</th>
                     <th>Notes</th>
-                    <th>Actions</th>
+                    <?php if($_SESSION['role']==3){ ?>
+                        <th>Actions</th>
+                    <?php } ?>
                 </tr>
                 </tfoot>
             </table>

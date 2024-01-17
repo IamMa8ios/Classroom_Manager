@@ -15,6 +15,7 @@ function startTimer() {
         if (countdownTime <= 0) {
             clearInterval(timerInterval); // Stop the timer
             alert('Time to logout!'); // Display the alert message
+            window.location.href = 'navbar-EN.php?logout=1';
         }
     }, 1000);
 }

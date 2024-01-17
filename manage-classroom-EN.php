@@ -6,33 +6,32 @@ $title = "Creating new Class";
 $action = "create";
 $name = $buildingName = $capacity = $time_available_start = $time_available_end = $days_available = $type = $computers = $projector = $locked = "";
 
-//if($_SESSION['role']>2){
-if (isset($_POST['edit'])) {
-    $conn = connect2db();
-    $stmt = $conn->prepare("select * from classroom where id = ?");
-    $stmt->bind_param("i", $_POST['edit']);
-    $stmt->execute();
-    $classData = $stmt->get_result()->fetch_assoc();
+if ($_SESSION['role'] > 2) {
+    if (isset($_POST['edit'])) {
+        $conn = connect2db();
+        $stmt = $conn->prepare("select * from classroom where id = ?");
+        $stmt->bind_param("i", $_POST['edit']);
+        $stmt->execute();
+        $classData = $stmt->get_result()->fetch_assoc();
 
-    $action = "edit";
-    $name = $classData['name'];
-    $title = "Editing " . $name;
-    $buildingName = $classData['building'];
-    $capacity = $classData['capacity'];
-    $time_available_start = $classData['time_available_start'];
-    $time_available_end = $classData['time_available_end'];
-    $days_available = $classData['days_available'];
-    $type = $classData['type'];
-    $computers = $classData['computers'];
-    $projector = $classData['projector'];
-    $locked = $classData['locked'];
-    $conn->close();
+        $action = "edit";
+        $name = $classData['name'];
+        $title = "Editing " . $name;
+        $buildingName = $classData['building'];
+        $capacity = $classData['capacity'];
+        $time_available_start = $classData['time_available_start'];
+        $time_available_end = $classData['time_available_end'];
+        $days_available = $classData['days_available'];
+        $type = $classData['type'];
+        $computers = $classData['computers'];
+        $projector = $classData['projector'];
+        $locked = $classData['locked'];
+        $conn->close();
+    }
+}else {
+    header("Location: index-EN.php");
 }
-//    else{
-//        header("Location: index-EN.php");
-//    }
-//}
-$navTitle=$title;
+$navTitle = $title;
 ?>
 
 <!DOCTYPE html>
@@ -68,13 +67,6 @@ $navTitle=$title;
         <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
             <form id="create_class_form" action="manage_class_script.php" method="post">
 
-                <?php if(isset($_POST['edit'])){ ?>
-                <div class="input-group ">
-                    <input type="text" style="display: none" class="form-control" name="classID" value="<?php echo $_POST['edit']; ?>"
-                           id="classID">
-                </div>
-                <?php } ?>
-
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
                         <div class="input-group">
@@ -86,7 +78,8 @@ $navTitle=$title;
                     <div class="col-md-6">
                         <div class="input-group">
                             <label class="input-group-text" for="building">Building</label>
-                            <input type="text" class="form-control" name="building" value="<?php echo $buildingName; ?>" id="building"
+                            <input type="text" class="form-control" name="building" value="<?php echo $buildingName; ?>"
+                                   id="building"
                                    required>
                         </div>
                     </div>
@@ -113,7 +106,7 @@ $navTitle=$title;
                     <div class="col-md-6">
                         <div class="input-group">
                             <label class="input-group-text" for="capacity">Capacity</label>
-                            <input type="number" class="form-control" name="capacity" id="capacity" onclick="handleLabTheorySwitch('capacity','')"
+                            <input type="number" class="form-control" name="capacity" id="capacity"
                                    value="<?php echo $capacity; ?>" min="5" max="150" step="1" required>
                         </div>
                     </div>
@@ -185,31 +178,38 @@ $navTitle=$title;
                     </div>
                 </div>
 
-                <?php //FIXME:load "computers" on edit if class is a lab ?>
+                <?php //FIXME:load "computers" on edit on load ?>
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
-                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')" data-theory="Theory"
-                               data-lab="Lab" <?php if (!$type) { echo "checked";} ?>>
+                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" <?php if($classData['type'] == 1) echo 'checked';?>
+                               onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')" data-theory="Theory"
+                               data-lab="Lab">
                     </div>
 
-                <div class="col-md-6">
-                    <div class="input-group visually-hidden" id="lab-capacity">
-                        <label class="input-group-text" for="computers">Number of Computers</label>
-                        <input type="number" class="form-control" name="computers" id="computers"
-                               step="1" value="<?php echo $computers; ?>">
+                    <div class="col-md-6">
+                        <div class="input-group visually-hidden" id="lab-capacity">
+                            <label class="input-group-text" for="computers">Number of Computers</label>
+                            <input type="number" class="form-control" name="computers" id="computers"
+                                   step="1" value="<?php echo $computers; ?>">
+                        </div>
                     </div>
-                </div>
-                <div class="row my-3">
-                    <div class="col">
-                        <button type="button" class="btn btn-secondary btn-not"><i
-                                    class="fas fa-long-arrow-alt-left mx-2"></i> Back
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-not" onclick="clearClassForm()">Clear <i
-                                    class="fas fa-eraser"></i></button>
-                        <button type="submit" class="btn btn-primary" name="action" value="<?php echo $action; ?>">
-                            Submit <i class="far fa-check-circle"></i></button>
+                    <div class="row my-3">
+                        <div class="col">
+                            <?php if(isset($_POST['edit'])){ ?>
+                            <form action="manage-classroom-EN.php" method="post">
+                                <button class="btn" name="delete" title="Delete"
+                                        value="<?php echo $_POST['edit']; ?>">Delete <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                            <?php } ?>
+                            <button type="button" class="btn btn-secondary btn-not" onclick="clearClassForm()">Clear <i
+                                        class="fas fa-eraser"></i></button>
+                            <button type="submit" class="btn btn-primary"
+                                    name="<?php echo isset($_POST['edit'])?'edit':'create'; ?>"
+                                    value="<?php if(isset($_POST['edit'])) echo $_POST['edit']; ?>">
+                                Submit <i class="far fa-check-circle"></i></button>
+                        </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -219,12 +219,6 @@ $navTitle=$title;
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-<!-- FullCalendar JS -->
-<script src='fullcalendar/packages/core/main.js'></script>
-<script src='fullcalendar/packages/interaction/main.js'></script>
-<script src='fullcalendar/packages/daygrid/main.js'></script>
-<script src='fullcalendar/packages/timegrid/main.js'></script>
-<script src='fullcalendar/packages/list/main.js'></script>
 
 <script src='js/main.js'></script>
 </body>

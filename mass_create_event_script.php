@@ -40,28 +40,56 @@ if (isset($_FILES['file'])) {
 
         // Display the data
         print_r($labels);
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
 
 
-//        foreach ($data as $datum){
-//            $conn=connect2db();
-//            $stmt = $conn->prepare("insert into reservation(userID, repeatable, classroomID, lectureID,
-//                        start_date, end_date, start_time, duration, day_of_week) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-//            $dayOfWeek=null;
-//            if($datum[0]){
-//                $unixTimestamp = strtotime($datum[4]);
-//                $dayOfWeek = date("w", $unixTimestamp);
-//            }
-//            $stmt->bind_param("iisiisssi", $_SESSION['userID'], $datum[0], $datum[1], $datum[2], $datum[3], $datum[4], $datum[5], $datum[6], $datum[7], dayOfWeek);
-//            $stmt->execute();
-//            $conn->close();
-//        }
-//
-//        exit();
+        foreach ($data as $datum){
+            $datum=explode(";", $datum[0]);
+            printArray($datum);
+
+            $conn=connect2db();
+            $stmt = $conn->prepare("select id from classroom where building=? and name=?");
+            $stmt->bind_param("ss", $datum[1], $datum[2]);
+            $stmt->execute();
+            $classID=$stmt->get_result()->fetch_assoc();
+            printArray($classID);
+            $conn->close();
+
+            $conn=connect2db();
+            $stmt = $conn->prepare("select id from lecture where name=?");
+            $stmt->bind_param("s", $datum[3]);
+            $stmt->execute();
+            $lectureID=$stmt->get_result()->fetch_assoc();
+            $conn->close();
+
+            $startDate=date_format(date_create($datum[4]),"Y-m-d");
+            $endDate=date_format(date_create($datum[5]),"Y-m-d");
+
+            echo "<br>";
+            echo $startDate;
+            echo "<br>";
+            echo $endDate;
+            echo "<br>";
+
+            $conn=connect2db();
+            //            repeatable	building	classroom	lecture	start_date	end_date	start_time	duration
+            $stmt = $conn->prepare("insert into reservation(userID, repeatable, classroomID, lectureID, 
+                        start_date, end_date, start_time, duration, day_of_week) 
+                        values(?, ?, ?, ?, str_to_date(?,'%Y-%m-%d'), str_to_date(?,'%Y-%m-%d'), ?, ?, ?)");
+            $dayOfWeek=null;
+            if($datum[0]){
+                $unixTimestamp = strtotime($datum[4]);
+                $dayOfWeek = date("w", $unixTimestamp);
+            }
+
+            $stmt->bind_param("iisiisssi", $_SESSION['userID'], $datum[0], $classID['id'], $lectureID['id'], $startDate, $endDate, $datum[6], $datum[7], $dayOfWeek);
+            $stmt->execute();
+            $conn->close();
+
+        }
 
     } else {
         echo "Upload failed.\n";
     }
 }
+
+header("Location: index-EN.php");

@@ -14,7 +14,7 @@ if ($_SESSION['role'] > 1) {
         header("Location: index-EN.php");
     }
     $stmt = $conn->prepare($sql);
-    if ($_SESSION['role']==1){
+    if ($_SESSION['role']==2){
         $stmt->bind_param("i", $_SESSION['userID']);
     }
     $stmt->execute();
@@ -64,7 +64,10 @@ if ($_SESSION['role'] > 1) {
         $stmt = $conn->prepare("select * from user where roleID=2");
         $stmt->execute();
         $result = $stmt->get_result(); // get the mysqli result
-        $teachers = $result->fetch_assoc();
+        $teachers=array();
+        while ($teacher = $result->fetch_assoc()) {
+            array_push($teachers, $teacher);
+        }
         $conn->close();
 
         $startDate=$event['start_date'];
@@ -86,7 +89,7 @@ if ($_SESSION['role'] > 1) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $navTitle; ?>></title>
+    <title><?php echo $navTitle; ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- FullCalendar CSS -->
@@ -137,7 +140,8 @@ if ($_SESSION['role'] > 1) {
                                 <label class="input-group-text" for="lectures">Lectures</label>
                                 <select class="form-select" name="lectureID" id="lectures" required>
                                     <?php foreach ($lectures as $lecture) { ?>
-                                        <option value="<?php echo $lecture['id'];?>" <?php if($lecture['id']==$event['lectureID']) echo " selected "; ?>>
+                                        <option value="<?php echo $lecture['id'];?>"
+                                            <?php if($_SESSION['role']==3 && $lecture['id']==$event['lectureID']) echo " selected "; ?>>
                                             <?php echo $lecture['code'] . " - " . $lecture['name']; ?>
                                         </option>
                                     <?php } ?>
@@ -166,7 +170,7 @@ if ($_SESSION['role'] > 1) {
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="startTime">Start Time</label>
-                                <input type="time" class="form-control" name="startTime" id="startTime"
+                                <input type="time" class="form-control" name="startTime" value="<?php echo $startTime; ?>" id="startTime"
                                        min="<?php echo $minStart; ?>" max="<?php echo $maxStart; ?>" required>
                             </div>
                         </div>
@@ -184,7 +188,7 @@ if ($_SESSION['role'] > 1) {
                         <div class="col-md-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="userID">Teacher</label>
-                                <select class="form-select" name="userID" id="userID" required>
+                                <select class="form-select" name="teacher" id="teacher" required>
                                     <?php foreach ($teachers as $teacher) { ?>
                                         <option value="<?php echo $teacher['id'];?>" <?php if($teacher['id']==$event['userID']) echo " selected "; ?>>
                                             <?php echo $teacher['name']; ?>
