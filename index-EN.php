@@ -117,7 +117,6 @@ if (isset($_POST['classroom'])) {
 
                 // Add an event listener to the custom button
                 $editEventBtn.addEventListener('click', function () {
-                    //FIXME: Redirect to edit event (done)
                     // Create a form element
                     var form = document.createElement('form');
                     form.method = 'post';

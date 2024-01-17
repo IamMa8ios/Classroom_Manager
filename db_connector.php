@@ -34,3 +34,9 @@ function connect2db(){
     }
     return $conn;
 }
+
+function printArray($array){
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
+}

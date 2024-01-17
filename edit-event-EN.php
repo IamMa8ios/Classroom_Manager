@@ -64,7 +64,7 @@ $navTitle = "Edit Event";
     <div id="content">
         <?php require_once "navbar-EN.php" ?>
 
-        <!--        FIXME: get event date for edit form-->
+        <!--        FIXME: get event date for edit form -->
 
 
     </div>

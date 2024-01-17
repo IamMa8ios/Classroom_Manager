@@ -50,6 +50,7 @@ while ($row = $result->fetch_assoc()) {
         $reservation['end'] = $row['start_date']."T".$end_time;
     }
 
+    $reservation['url']="create_event-EN.php?eventID=".$row['id'];
     array_push($reservations, $reservation);
     $reservation=array();
 
