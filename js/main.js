@@ -66,7 +66,7 @@ function clearRecoupmentForm() {
     document.getElementById("recoupment_form").reset();
 }
 
-function createSuccessAlert(title = 'Success !',text='') {
+function createSuccessAlert(title = 'Success!',text='') {
     return Swal.fire({
         position: 'center',
         icon: 'success',

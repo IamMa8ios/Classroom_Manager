@@ -220,7 +220,17 @@ $navTitle = $title;
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+    // FIXME: must have in all pages, that's how notifs work
 
+    window.addEventListener('load', function () {
+        <?php if (isset($_SESSION['notification'])) {
+        echo $_SESSION['notification'];
+        unset($_SESSION['notification']);
+    }?>
+    })
+
+</script>
 <script src='js/main.js'></script>
 </body>
 

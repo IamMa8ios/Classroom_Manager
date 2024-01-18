@@ -21,7 +21,7 @@ if (isset($_POST['register'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "Email is already registered";
+        $_SESSION['notification'] = 'createErrorAlert("Sorry!", "This email is already in use!")';
         $_SESSION['role'] = 1;
     } else {
 
@@ -36,18 +36,18 @@ if (isset($_POST['register'])) {
         $stmt->bind_param("ssss", $email, $password, $name, $dept);
 
         if ($stmt->execute()) {
-            echo "Registration successful";
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['dept'] = $dept;
             header("Location: index-EN.php");
         } else {
             $_SESSION['role'] = 1;
-            echo "Error: " . $stmt->error;
+            $_SESSION['notification'] = 'createErrorAlert("Oops...", "Something went wrong! If this error persists, contact and administrator.")';
         }
     }
 
     $stmt->close();
+    $conn->close();
 }
 
 // Handle login
@@ -69,24 +69,24 @@ if (isset($_POST['login'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            echo "Login successful";
             $_SESSION['name'] = $row['name'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['dept'] = $row['department'];
             $_SESSION['userID'] = $row['id'];
             $_SESSION['role'] = $row['roleID'];
-            $_SESSION['notification'] = 'createSuccessAlert("center","Login successful")';
+            $_SESSION['notification'] = 'createSuccessAlert("Success", "Welcome, '.$_SESSION['name'].'")';
             header("Location: index-EN.php");
         } else {
-            echo "Invalid password";
+            $_SESSION['notification'] = 'createErrorAlert("Oops...", "Your password is wrong")';
             $_SESSION['role'] = 1;
         }
     } else {
-        echo "Email not found";
+        $_SESSION['notification'] = 'createErrorAlert("Oops...", "Your email is wrong")';
         $_SESSION['role'] = 1;
     }
 
     $stmt->close();
+    $conn->close();
 }
 
 ?>
@@ -110,11 +110,14 @@ if (isset($_POST['login'])) {
     <!-- Style -->
     <link rel="stylesheet" href="css/login-register.css">
 
+    <!-- Include SweetAlert 2 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
-    <title>Calendar #10</title>
+    <title>Authentication</title>
 </head>
 
 <body>
@@ -190,6 +193,14 @@ if (isset($_POST['login'])) {
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            <?php if (isset($_SESSION['notification'])) {
+            echo $_SESSION['notification'];
+            unset($_SESSION['notification']);
+        }?>
+        })
+    </script>
     <script src="js/main.js"></script>
 
 </body>

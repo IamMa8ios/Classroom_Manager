@@ -10,7 +10,7 @@ if(!isset($_SESSION)){
 
 require_once "db_connector.php";
 
-$classID = $userID = $lectureID = $dayOfWeek = $startTime = $duration = $startDate = $endDate = "";
+$classID = $userID = $lectureID = $dayOfWeek = $startTime = $duration = $startDate = $endDate = $errors = "";
 $params = array();
 
 if(isset($_POST['teacher'])){
@@ -18,37 +18,43 @@ if(isset($_POST['teacher'])){
 }elseif (isset($_SESSION['userID'])) {
     $userID = sanitize($_SESSION['userID']);
 } else {
-    echo "user id not set";
+    $errors="You forgot to set a user!\n";
 }
 
 if (isset($_POST['classID'])) {
     $classID = sanitize($_POST['classID']);
 } else {
-    echo "class id not set";
+    $errors=$errors."You forgot to set a classroom!\n";
 }
 
+unset($_POST['lectureID']);
 if (isset($_POST['lectureID'])) {
     $lectureID = sanitize($_POST['lectureID']);
 } else {
-    echo "lecture id not set";
+    $errors=$errors."You forgot to set a lecture!\n";
 }
 
 if (isset($_POST['startDate'])) {
     $startDate = sanitize($_POST['startDate']);
 } else {
-    echo "start date not set";
+    $errors=$errors."You forgot to set a start date!\n";
 }
 
 if (isset($_POST['startTime'])) {
     $startTime = sanitize($_POST['startTime']);
 } else {
-    echo "start time not set";
+    $errors=$errors."You forgot to set a start time!\n";
 }
 
 if (isset($_POST['duration'])) {
     $duration = sanitize($_POST['duration']);
 } else {
-    echo "start time not set";
+    $errors=$errors."You forgot to set duration!\n";
+}
+
+if(!empty($errors)){
+    $_SESSION['notification'] = 'createErrorAlert("Oops...", "")';
+    header("Location: index-en.php");
 }
 
 $conn = connect2db();
