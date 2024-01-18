@@ -9,7 +9,7 @@ if ($_SESSION['role'] > 2) {
         $stmt = $conn->prepare("delete from classroom where id = ?");
         $stmt->bind_param("i", $_POST['delete']);
         if ($stmt->execute()) {
-            echo "class " . $_POST['delete'] . " deleted";
+            $_SESSION['notification'] = 'createSuccessAlert("Deleted","Classroom Successfully Deleted")';
         } else {
             echo "could not delete";
         }
@@ -82,4 +82,4 @@ if ($_SESSION['role'] > 2) {
 
 }
 
-header("Location: index-en.php");
+header("Location: index-EN.php");

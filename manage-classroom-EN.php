@@ -181,7 +181,7 @@ $navTitle = $title;
                 <?php //FIXME:load "computers" on edit on load ?>
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
-                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" <?php if($classData['type'] == 1) echo 'checked';?>
+                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" <?php if(isset($classData) && $classData['type'] == 1) echo 'checked';?>
                                onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')" data-theory="Theory"
                                data-lab="Lab">
                     </div>
@@ -196,11 +196,12 @@ $navTitle = $title;
                     <div class="row my-3">
                         <div class="col">
                             <?php if(isset($_POST['edit'])){ ?>
-                            <form action="manage-classroom-EN.php" method="post">
-                                <button class="btn" name="delete" title="Delete"
+
+                                <button class="btn btn-secondary btn-not" name="delete" title="Delete"
                                         value="<?php echo $_POST['edit']; ?>">Delete <i class="fas fa-trash-alt"></i>
+
                                 </button>
-                            </form>
+<!--                                FIXME: change all buttons to sexy dashboard's buttons-->
                             <?php } ?>
                             <button type="button" class="btn btn-secondary btn-not" onclick="clearClassForm()">Clear <i
                                         class="fas fa-eraser"></i></button>

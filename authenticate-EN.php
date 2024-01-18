@@ -6,12 +6,6 @@ if ($_SESSION['role'] != 1) {
     header("Location: index-EN.php");
 }
 
-// Function to sanitize input data
-function sanitize($data)
-{
-    return htmlspecialchars(stripslashes(trim($data)));
-}
-
 $email = $password = $name = $dept = $roleID = "";
 
 // Handle registration
@@ -81,6 +75,7 @@ if (isset($_POST['login'])) {
             $_SESSION['dept'] = $row['department'];
             $_SESSION['userID'] = $row['id'];
             $_SESSION['role'] = $row['roleID'];
+            $_SESSION['notification'] = 'createSuccessAlert("center","Login successful")';
             header("Location: index-EN.php");
         } else {
             echo "Invalid password";

@@ -21,6 +21,8 @@ if (isset($_POST['classroom'])) {
 } else {
     $navTitle = "Please Select a Classroom";
 }
+
+//$_SESSION['notification'] = 'createSuccessAlert()';
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +40,9 @@ if (isset($_POST['classroom'])) {
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    <!-- Include SweetAlert 2 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <link rel="stylesheet" href="css/style.css">
@@ -73,7 +78,6 @@ if (isset($_POST['classroom'])) {
             background-color: var(--dark-purple); /* Change this to the desired active color */
             color: var(--white-ish); /* Change this to the desired active text color */
         }
-
 
 
     </style>
@@ -135,12 +139,12 @@ if (isset($_POST['classroom'])) {
                 type: "POST",
                 color: "#1f2029"
             },
-            <?php if($_SESSION['role']!=1){ ?>
+            <?php if($_SESSION['role'] != 1){ ?>
             dateClick: function (info) {
                 location.href = `create_event-EN.php?date=${info.dateStr}`;
             },
             <?php } ?>
-            <?php if($_SESSION['role']>2){ ?>
+            <?php if($_SESSION['role'] > 2){ ?>
             eventRender: function (info) {
                 // Customize the event rendering here
                 var $eventElement = info.el;
@@ -180,7 +184,20 @@ if (isset($_POST['classroom'])) {
     });
 </script>
 
+<script>
+    // FIXME: must have in all pages, that's how notifs work
+
+    window.addEventListener('load', function () {
+        <?php if (isset($_SESSION['notification'])) {
+        echo $_SESSION['notification'];
+        unset($_SESSION['notification']);
+    }?>
+    })
+
+</script>
+
 <script src='js/main.js'></script>
+
 </body>
 
 </html>

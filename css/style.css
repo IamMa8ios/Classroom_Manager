@@ -158,7 +158,8 @@ body {
 .modal-content,
 #profile .card-body,
 .accordion-collapse,
-#accordionFlushExample {
+#accordionFlushExample,
+.swal2-popup.swal2-modal {
     background-color: var(--svg-background);
     background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
     background-position: bottom center;
@@ -572,4 +573,16 @@ input.lab-switch:checked::after {
 }
 #accordionFlushExample .accordion-body {
     background: var(--dark-purple);
+}
+
+.swal2-popup.swal2-modal * {
+    color: var(--white-ish);
+}
+.swal2-popup.swal2-modal button.swal2-confirm{
+    background: var(--dark-purple);
+    border-radius: var(--bor-rad);
+}
+.swal2-popup.swal2-modal button.swal2-confirm:hover,
+.swal2-popup.swal2-modal button.swal2-confirm:focus{
+    outline: 1px solid var(--white-ish);
 }
