@@ -156,7 +156,9 @@ body {
 .navbar,
 .bg-purple-svg,
 .modal-content,
-#profile .card-body{
+#profile .card-body,
+.accordion-collapse,
+#accordionFlushExample {
     background-color: var(--svg-background);
     background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
     background-position: bottom center;
@@ -300,12 +302,14 @@ input[type=checkbox]:checked {
     width: 100%;
     color: var(--white-ish);
 }
-.sidebar-header{
+
+.sidebar-header {
     transition: 250ms ease-in-out;
     border-radius: var(--bor-rad);
 
 }
-.sidebar-header:hover{
+
+.sidebar-header:hover {
     scale: .95;
     box-shadow: inset 0 0 .8em var(--dark-purple);
 }
@@ -462,7 +466,7 @@ input.lab-switch:checked::after {
 #edit-a:hover,
 #delete-a:hover,
 .modal-footer button,
-.modal-footer a{
+.modal-footer a {
     background-color: var(--dark-purple);
     color: var(--white-ish);
     box-shadow: inset 0 0 .5em var(--white-ish);
@@ -471,7 +475,7 @@ input.lab-switch:checked::after {
 
 #delete-a:hover .fas,
 .modal-footer button[data-bs-dismiss="modal"]:hover .far,
-.modal-footer a[data-bs-dismiss="modal"]:hover .far{
+.modal-footer a[data-bs-dismiss="modal"]:hover .far {
     color: darkred;
 }
 
@@ -495,51 +499,77 @@ input.lab-switch:checked::after {
 }
 
 .modal-footer button[type="submit"]:hover .far,
-.modal-footer a[type="submit"]:hover .far{
+.modal-footer a[type="submit"]:hover .far {
     color: forestgreen;
 }
+
 .Pending,
 .Approved,
-.Denied{
+.Denied {
 
 }
-#recoupmentDataTable .Pending{
+
+#recoupmentDataTable .Pending {
     position: relative;
     color: darkorange;
     animation: animDot 3s infinite ease-in-out;
 }
-#recoupmentDataTable .Approved{
+
+#recoupmentDataTable .Approved {
     text-shadow: 0 0 3px forestgreen;
     color: forestgreen;
 }
-#recoupmentDataTable .Denied{
+
+#recoupmentDataTable .Denied {
     text-shadow: 0 0 3px darkred;
     color: darkred;
 }
+
 @keyframes animDot {
-    from{ text-shadow: 0 0 5px currentColor;}
-    50%{ text-shadow: 0 0 2px currentColor;}
-    to{ text-shadow: 0 0 5px currentColor;}
+    from {
+        text-shadow: 0 0 5px currentColor;
+    }
+    50% {
+        text-shadow: 0 0 2px currentColor;
+    }
+    to {
+        text-shadow: 0 0 5px currentColor;
+    }
 }
+
 #profile * {
     color: var(--white-ish);
     transition: 250ms ease-in-out;
 }
-#profile .card-header{
+
+#profile .card-header {
     background-color: var(--dark-purple);
 }
-#profile .card-body{
+
+#profile .card-body {
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
     background-color: var(--light-purple);
 }
-#profile :focus{
+
+#profile :focus {
     border: none;
     box-shadow: 0 0 .5em currentColor;
 }
-#profile .form-control{
+
+#profile .form-control {
     background: var(--dark-purple);
 }
-.profile-settings button:first-child{
 
+#accordionFlushExample h2.accordion-header{
+
+}
+#accordionFlushExample h2.accordion-header button {
+    background: var(--light-purple);
+    color: var(--white-ish);
+    font-weight: bold;
+
+}
+#accordionFlushExample .accordion-body {
+    background: var(--dark-purple);
 }
