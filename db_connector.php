@@ -35,6 +35,10 @@ function connect2db(){
     return $conn;
 }
 
+function sanitize($data){
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
 function printArray($array){
     echo "<pre>";
     print_r($array);

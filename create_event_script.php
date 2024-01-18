@@ -10,10 +10,6 @@ if(!isset($_SESSION)){
 
 require_once "db_connector.php";
 
-function sanitize($data){
-    return htmlspecialchars(stripslashes(trim($data)));
-}
-
 $classID = $userID = $lectureID = $dayOfWeek = $startTime = $duration = $startDate = $endDate = "";
 $params = array();
 

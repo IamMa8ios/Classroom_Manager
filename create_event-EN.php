@@ -1,38 +1,40 @@
 <?php
 require_once "session_manager.php";
 require_once "db_connector.php";
+require_once "date_repeater.php";
 
 if ($_SESSION['role'] > 1) {
 
     $conn = connect2db();
-    $sql = "";
-    if ($_SESSION['role'] == 2) {
-        $sql = "select * from lecture where userID = ?";
-    } elseif ($_SESSION['role'] == 3) {
-        $sql = "select * from lecture";
-    } else {
+    $sql="";
+    if($_SESSION['role']==2){
+        $sql="select * from lecture where userID = ?";
+    }elseif ($_SESSION['role']==3){
+        $sql="select * from lecture";
+    }else{
         header("Location: index-EN.php");
     }
     $stmt = $conn->prepare($sql);
-    if ($_SESSION['role'] == 2) {
+    if ($_SESSION['role']==2){
         $stmt->bind_param("i", $_SESSION['userID']);
     }
     $stmt->execute();
     $result = $stmt->get_result(); // get the mysqli result
     $lectures = array();
     while ($lecture = $result->fetch_assoc()) {
-        array_push($lectures, $lecture);
+        $lectures[] = $lecture;
     }
     $conn->close();
 
-    $action = $startDate = $endDate = $startTime = "";
-    $duration = 0;
-    $defaultLecture = $lectures[0];
+    $action=$startDate=$endDate=$startTime="";
+    $duration=0;
+    $defaultLecture=$lectures[0];
 
     if (isset($_GET['date'])) {
-        $action = "create";
+        $action="create";
         $startDate = $_GET['date'];
 
+        // For new event
         $conn = connect2db();
         $stmt = $conn->prepare("select time_available_start as `start`, time_available_end as `end` from classroom where id = ?");
         $stmt->bind_param("i", $_SESSION['classID']);
@@ -47,8 +49,47 @@ if ($_SESSION['role'] > 1) {
 
         $navTitle = "Creating New Event";
         $formTitle = "New Event";
-    } elseif (isset($_GET['eventID']) && $_SESSION['role'] == 3) {
-        $action = "edit";
+
+        // For recoupments
+        //FIXME: If admin -> select teacher (dropdown)
+        //userID request_timestamp status request_start date_lost date_recouped classroomID start_time duration
+
+        // get all starting and ending dates for each event
+        $conn = connect2db();
+        $sql="select id, start_date as `start`, end_date as `end`, lectureID, repeatable from reservation";
+        if($_SESSION['role']==2) $sql=$sql." where userID=?";
+        $stmt = $conn->prepare($sql);
+        if($_SESSION['role']==2) $stmt->bind_param("i", $_SESSION['userID']);
+        $stmt->execute();
+        $result=$stmt->get_result();
+        $originalEvents=array();
+        while ($reservation = $result->fetch_assoc()) {
+            $originalEvents[] = $reservation;
+        }
+        $conn->close();
+
+        //get lecture name for event
+        foreach ($originalEvents as $key=>$event){
+            foreach ($lectures as $lecture){
+//                echo $lecture['id']==$event['lectureID']?"matched":"not matched";
+                if($lecture['id']==$event['lectureID']){
+                    $originalEvents[$key]['lecture']=$lecture['name'];
+                    break;
+                }
+            }
+
+            if($event['repeatable']){
+                $originalEvents[$key]['possible_dates']=getDatesBetween($event['start'], $event['end']);
+            }else{
+                $originalEvents[$key]['possible_dates']=[$event['start']];
+            }
+        }
+
+        // date lost -> dropdown of all dates until end date (if repeatable)
+        // date recouped = date selected from calendar
+
+    }elseif (isset($_GET['eventID']) && $_SESSION['role']==3){
+        $action="edit";
         $navTitle = "Editing Event";
         $formTitle = "Edit Event";
 
@@ -64,17 +105,17 @@ if ($_SESSION['role'] > 1) {
         $stmt = $conn->prepare("select * from user where roleID=2");
         $stmt->execute();
         $result = $stmt->get_result(); // get the mysqli result
-        $teachers = array();
+        $teachers=array();
         while ($teacher = $result->fetch_assoc()) {
             array_push($teachers, $teacher);
         }
         $conn->close();
 
-        $startDate = $event['start_date'];
-        $endDate = $event['end_date'];
-        $startTime = $event['start_time'];
-        $duration = $event['duration'];
-    } else {
+        $startDate=$event['start_date'];
+        $endDate=$event['end_date'];
+        $startTime=$event['start_time'];
+        $duration=$event['duration'];
+    }else{
         header("Location: index-EN.php");
     }
 } else {
@@ -128,15 +169,7 @@ if ($_SESSION['role'] > 1) {
                         <div class="accordion-body">
 
                             <div class="container mt-5 bg-purple-svg" id="create-event-container">
-<!--                                <div class="row g-3 my-3">-->
-<!--                                                                    <div class="col-md-6">-->
-<!--                                                                        <div class="form-check my-3">-->
-<!--                                                                            <input class="form-check-input" type="checkbox" id="create-event"-->
-<!--                                                                                   onclick="handleLabTheorySwitch('create-event','create-event-fields')">-->
-<!--                                                                            <label class="form-check-label" for="create-event">--><?php //echo $formTitle; ?><!--</label>-->
-<!--                                                                        </div>-->
-<!--                                                                    </div>-->
-<!--                                </div>-->
+
                                 <div class="row container" id="create-event-fields">
                                     <form id="create_event_form" action="create_event_script.php" method="post">
                                         <input type="text" class="form-control" name="classID" id="classID"
@@ -284,73 +317,70 @@ if ($_SESSION['role'] > 1) {
                             <div class="accordion-body">
                                 <div class="mt-5 bg-purple-svg" id="create-recoupment-container">
                                     <form class="container p-2" id="recoupment_form" action="create_recoupment_script.php" method="post">
-<!--                                        <div class="row g-3 my-3">-->
-<!--                                            <div class="col-md-6">-->
-<!--                                                <div class="form-check my-3">-->
-<!--                                                    <input class="form-check-input" type="checkbox" name="recoupment" value=""-->
-<!--                                                           id="recoupment"-->
-<!--                                                           onclick="handleLabTheorySwitch('recoupment','recoupment-fields')">-->
-<!--                                                    <label class="form-check-label" for="recoupment">Recoupment</label>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-
                                         <div class="row g-3 my-3 bg-purple-svg" id="recoupment-fields">
+
+                                            <input type="text" class="form-control" name="classID" id="classID"
+                                                   value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
                                             <div class="col-md-6">
                                                 <div class="input-group">
-                                                    <label class="input-group-text" for="initial-reservation">Initial
-                                                        Reservation</label>
-                                                    <select class="form-select" name="initial-reservation" id="initial-reservation"
-                                                            required>
-                                                        <?php foreach ($lectures as $lecture) { // change ?>
-                                                            <option value="<?php echo $lecture['id']; ?>">
-                                                                <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
-                                                            </option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <label class="input-group-text" for="className">Class Name</label>
+                                                    <input type="text" class="form-control"
+                                                           value="<?php echo $_SESSION['className']; ?>"
+                                                           id="className" required readonly>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6 my-3">
                                                 <div class="input-group">
                                                     <label class="input-group-text" for="recoupment-date">Recoupment Date</label>
-                                                    <input type="date" class="form-control" name="recoupment-date" value=""
+                                                    <input type="date" class="form-control" name="recoupment-date" value="<?php echo $_GET['date']; ?>"
                                                            id="recoupment-date"
                                                            required readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 my-3">
-                                                <div class="input-group">
-                                                    <label class="input-group-text" for="recoupment-date">Actual Recoupment Date</label>
-                                                    <input type="date" class="form-control" name="recoupment-date" value=""
-                                                           id="recoupment-date"
-                                                           required readonly>
-                                                </div>
-                                            </div>
+
                                             <div class="col-md-6">
                                                 <div class="input-group">
-                                                    <label class="input-group-text" for="recoupment-hall">Recoupment Hall</label>
-                                                    <select class="form-select" name="recoupment-hall" id="recoupment-hall" required>
-                                                        <?php foreach ($lectures as $lecture) { // change ?>
-                                                            <option value="<?php echo $lecture['id']; ?>">
-                                                                <?php echo $lecture['code'] . " - " . $lecture['name'] ?>
+                                                    <label class="input-group-text" for="initial-reservation">Initial Reservation</label>
+                                                    <select class="form-select" name="initial-reservation" id="initial-reservation"
+                                                            onchange="updateOptions()" required>
+                                                        <?php foreach ($originalEvents as $event) { ?>
+                                                            <option value="<?php echo $event['id']; ?>">
+                                                                <?php echo $event['lecture']." - ".$event['start']; ?>
                                                             </option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6 my-3">
                                                 <div class="input-group">
-                                                    <label class="input-group-text" for="recoupment-time">Recoupment Time</label>
-                                                    <input type="time" class="form-control" name="recoupment-time" id="recoupment-time"
+                                                    <label class="input-group-text" for="date_lost">Date Lost</label>
+                                                    <select class="form-select" name="date_lost" id="date_lost"
+                                                            required>
+                                                        <?php foreach ($originalEvents as $event) {  ?>
+                                                        <?php foreach ($event['possible_dates'] as $possible_date) {  ?>
+                                                            <option class="<?php echo $event['id']; ?>" id="<?php echo $event['id']; ?>" value="<?php echo $possible_date; ?>">
+                                                                <?php echo $event['lecture']." - ".$possible_date; ?>
+                                                            </option>
+                                                        <?php } }?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 my-3">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="start-time">Start Time</label>
+                                                    <input type="time" class="form-control" name="start_time" id="start-time"
                                                            min="<?php echo $minStart; ?>" max="<?php echo $maxStart; ?>" required>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6 my-3">
                                                 <div class="input-group">
-                                                    <label class="input-group-text" for="recoupment-duration">Recoupment
-                                                        Duration</label>
-                                                    <input type="number" class="form-control" name="recoupment-duration"
-                                                           id="recoupment-duration" min="1" max="3" step="0.5" required>
+                                                    <label class="input-group-text" for="duration">Duration                                                        Duration</label>
+                                                    <input type="number" class="form-control" name="duration"
+                                                           id="duration" min="1" max="3" step="0.5" required>
                                                 </div>
                                             </div>
 
@@ -364,6 +394,7 @@ if ($_SESSION['role'] > 1) {
                                                                 class="far fa-check-circle"></i></button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </form>
                                 </div>
@@ -394,6 +425,31 @@ if ($_SESSION['role'] > 1) {
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to update options in mySelect based on the selected option in groups
+        function updateOptions() {
+            var original_events = document.getElementById('initial-reservation');
+            var eventID = original_events.value;
+
+            var possible_dates = document.getElementById('date_lost');
+            var options = possible_dates.getElementsByTagName('option');
+
+
+            for (var i = 0; i < options.length; i++) {
+                var option = options[i];
+                if (option.id===eventID) {
+                    option.style.display="block";
+                }else{
+                    option.style.display="none";
+                }
+            }
+        }
+
+        updateOptions();
+        //FIXME: Add notifications
+    </script>
+
 
     <script src='js/main.js'></script>
 </body>
