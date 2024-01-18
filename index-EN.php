@@ -41,6 +41,42 @@ if (isset($_POST['classroom'])) {
 
 
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /*.fc-prev-button,*/
+        /*.fc-next-button,*/
+        /*.fc-today-button,*/
+        /*.fc-button-group .fc-button,*/
+        /*.fc-today-button,*/
+        /*.fc-button-group .fc-button-active{*/
+        /*    background: var(--dark-purple); !* Change this to the desired color *!*/
+        /*    color: var(--white-ish); !* Change this to the desired text color *!*/
+        /*    box-shadow: none;*/
+        /*    border: none;*/
+        /*}*/
+        /*.fc-button-group .fc-button:hover,*/
+        /*.fc-button-group .fc-button-active:hover,*/
+        /*.fc-today-button:hover{*/
+        /*    background: var(--dark-purple);*/
+        /*    box-shadow: inset 0 0 .5em var(--white-ish);*/
+        /*}*/
+        .fc-prev-button,
+        .fc-next-button,
+        .fc-today-button,
+        .fc-button-group .fc-button {
+            background-color: var(--dark-purple); /* Change this to the desired color */
+            color: var(--white-ish); /* Change this to the desired text color */
+        }
+
+        .fc-button.fc-button-active,
+        .fc-button.fc-button-active:active,
+        .fc-button.fc-button-active:focus {
+            background-color: var(--dark-purple); /* Change this to the desired active color */
+            color: var(--white-ish); /* Change this to the desired active text color */
+        }
+
+
+
+    </style>
 </head>
 
 <body>

@@ -1,5 +1,4 @@
 <?php
-//FIXME: On timeout actually logout
 if (isset($_POST['logout']) || isset($_GET['logout'])) {
     session_start();
     session_destroy();

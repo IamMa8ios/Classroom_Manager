@@ -176,7 +176,7 @@ $navTitle = $title;
                             <label class="form-check-label" for="friday">Friday</label>
                         </div>
                     </div>
-                </div>m
+                </div>
 
                 <?php //FIXME:load "computers" on edit on load ?>
                 <div class="row g-3 my-3">
