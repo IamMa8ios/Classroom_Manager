@@ -92,7 +92,7 @@ if (isset($_POST['classroom'])) {
 
     <!-- Page Content -->
     <div id="content">
-        <?php require_once "navbar-EN.php" ?>
+        <?php require_once "test-navbar-EN.php" ?>
         <?php require_once "modal.php" ?>
 
         <?php if (isset($_POST['classroom'])) { ?>
