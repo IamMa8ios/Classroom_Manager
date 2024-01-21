@@ -27,7 +27,6 @@ if (isset($_POST['classID'])) {
     $errors=$errors."You forgot to set a classroom!\n";
 }
 
-unset($_POST['lectureID']);
 if (isset($_POST['lectureID'])) {
     $lectureID = sanitize($_POST['lectureID']);
 } else {
@@ -53,8 +52,9 @@ if (isset($_POST['duration'])) {
 }
 
 if(!empty($errors)){
-    $_SESSION['notification'] = 'createErrorAlert("Oops...", "")';
-    header("Location: index-en.php");
+    $_SESSION['notification']['title'] = "Oops...";
+    $_SESSION['notification']['message'] = $errors;
+    header("Location: create_event-EN.php?date=".$startDate);
 }
 
 $conn = connect2db();
@@ -76,7 +76,9 @@ if (isset($_POST['recurring'])) {
         $stmt->bind_param("iiiissssi", $userID, $classID, $lectureID, $repeatable, $startDate, $endDate, $dayOfWeek, $startTime, $duration);
 
     } else {
-        echo "end date not set";
+        $_SESSION['notification']['title'] = "Oops...";
+        $_SESSION['notification']['message'] = $errors."You forgot to add an end date!\n";
+        header("Location: create_event-EN.php?date=".$startDate);
     }
 
 } else {
@@ -92,8 +94,13 @@ if (isset($_POST['recurring'])) {
 }
 
 if ($stmt->execute()) {
-    echo "booking successful";
-    header("Location: index-EN.php");
+    $_SESSION['notification']['title'] = "Success!";
+    $_SESSION['notification']['message'] = "Class ".$_SESSION['className']." has been booked!";
 } else {
-    echo "Error: " . $stmt->error;
+    $_SESSION['notification']['title'] = "Success!";
+    $_SESSION['notification']['message'] = "Class ".$_SESSION['className']." could not be booked!";
+    header("Location: create_event-EN.php?date=".$startDate);
 }
+
+$conn->close();
+header("Location: index-EN.php");

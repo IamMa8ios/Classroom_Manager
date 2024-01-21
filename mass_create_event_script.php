@@ -22,7 +22,7 @@ if (isset($_FILES['file'])) {
 
     // Move the uploaded file to the specified directory with the new filename
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-        echo "File is valid, and was successfully uploaded with the new filename: $newFileName.\n";
+//        echo "File is valid, and was successfully uploaded with the new filename: $newFileName.\n";
 
         // Read the CSV file contents, ignoring the first row
         $data = array();
@@ -64,14 +64,7 @@ if (isset($_FILES['file'])) {
             $startDate=date_format(date_create($datum[4]),"Y-m-d");
             $endDate=date_format(date_create($datum[5]),"Y-m-d");
 
-            echo "<br>";
-            echo $startDate;
-            echo "<br>";
-            echo $endDate;
-            echo "<br>";
-
             $conn=connect2db();
-            //            repeatable	building	classroom	lecture	start_date	end_date	start_time	duration
             $stmt = $conn->prepare("insert into reservation(userID, repeatable, classroomID, lectureID, 
                         start_date, end_date, start_time, duration, day_of_week) 
                         values(?, ?, ?, ?, str_to_date(?,'%Y-%m-%d'), str_to_date(?,'%Y-%m-%d'), ?, ?, ?)");
@@ -88,7 +81,8 @@ if (isset($_FILES['file'])) {
         }
 
     } else {
-        echo "Upload failed.\n";
+        $_SESSION['notification']['title'] = "Oops...";
+        $_SESSION['notification']['message'] = "Bookings from file were successfully added!";
     }
 }
 

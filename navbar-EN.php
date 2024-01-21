@@ -9,40 +9,54 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <h2> <?php echo $navTitle;?></h2>
+            <h2> <?php echo $navTitle; ?></h2>
             <ul class="navbar-nav ms-auto d-flex justify-content-between align-items-baseline gap-3">
                 <li class="nav-item">
-                    <button class="btn-slide timerBtn" onclick="location.reload()"></button>
+                    <button class="btn-slide timerBtn rounded-pill" onclick="location.reload()"></button>
                 </li>
-                <li class="nav-item">
-                    <div class="nav-item dropdown"> <!-- language dropdown menu -->
-                        <button class="btn btn-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Language
-                            <img src="img/united-states_32px.png" class="img-responsive inline-block" alt="flag"></img>
-                        </button>
 
-                        <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="index-EN.php">
-                                <img src="img/united-states_64px.png" class="img-responsive inline-block"></img>
-                                EN-US
-                            </a>
-                            <a class="dropdown-item" href="index-GR.php">
-                                <img src="img/greece_64px.png" class="img-responsive inline-block"></img>
-                                GR
-                            </a>
-                        </ul>
-                    </div>
-                </li>
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>
-                        <a href="authenticate-EN.php" class="btn-slide"><span>Login / Register</span></a>
+                        <a href="authenticate-EN.php"
+                           class="dropdown-item btn-slide"><span>Login / Register</span></a>
                     <?php } else { ?>
-                        <form action="navbar-EN.php" method="POST">
-                            <button name="logout" value="logout" class="btn-slide"><span><i class="fas fa-sign-out-alt"></i> Logout: <?php echo $_SESSION['name']; ?></span></button>
-                        </form>
-                    <?php } ?>
+                    <div class="btn-group">
+                        <button type="button"
+                                class="rounded-pill btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                id="settings"
+                                data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i>
+                            <?php echo $_SESSION['name']; ?>
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu pe-4 setting-dropdown-menu">
+                            <li><a class="dropdown-item" href="user-profile-EN.php">Profile</a></li>
+                            <li><a class="dropdown-item" >Language</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="dropdown-item" href="index-EN.php">
+                                    <img src="img/united-states_64px.png" class="img-responsive inline-block" alt="english flag"></img>
+                                    EN-US
+                                </a>
+                                <a class="dropdown-item" href="index-GR.php">
+                                    <img src="img/greece_64px.png" class="img-responsive inline-block" alt="greek flag"></img>
+                                    GR
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="mt-4">
+                                    <form action="navbar-EN.php" method="POST">
+                                        <button name="logout" value="logout" class="dropdown-item btn-slide"><span><i
+                                                        class="fas fa-sign-out-alt"></i> Logout</span>
+                                        </button>
+                                    </form>
+                                <?php } ?>
+                            </li>
                 </li>
             </ul>
         </div>
+
     </div>
 </nav>

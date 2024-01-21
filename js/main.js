@@ -47,6 +47,9 @@ function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
     var checkbox = document.getElementById(checkBoxID);
     var element = document.getElementById(hiddenElementID);
 
+    if (checkbox.checked) element.classList.remove('visually-hidden')
+    else element.classList.add('visually-hidden')
+
     // Attach an event listener to the checkbox's change event
     checkbox.addEventListener('change', function () {
         // If the checkbox is checked, remove the 'visually-hidden' class
@@ -66,54 +69,6 @@ function clearRecoupmentForm() {
     document.getElementById("recoupment_form").reset();
 }
 
-function createSuccessAlert(title = 'Success!',text='') {
-    return Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: title,
-        showConfirmButton: false,
-        text: text,
-        timer: 4000
-    });
-}
-function createErrorAlert(title ='Oops...',text='Something went wrong!') {
-
-    return Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: title,
-        text: text,
-        showConfirmButton: false,
-        timer: 4000
-    })
-}
-function createWarningAlert(){
-    Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-    icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel!",
-        reverseButtons: true
-}).then(function(result) {
-        if (result.value) {
-            Swal.fire(
-                "Deleted!",
-                "Your file has been deleted.",
-                "success"
-            )
-            // result.dismiss can be "cancel", "overlay",
-            // "close", and "timer"
-        } else if (result.dismiss === "cancel") {
-            Swal.fire(
-                "Cancelled",
-                "Your imaginary file is safe :)",
-                "error"
-            )
-        }
-    });
-}
 // -------------------------------------------------- /timer button -------------------------------------------------- 
 
 // -------------------------------------------------- MAIN --------------------------------------------------

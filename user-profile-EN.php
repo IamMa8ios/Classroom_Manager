@@ -2,27 +2,47 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-$title = "";
+$title = "My Profile";
+$email = $name = $department = "";
+$userID = $_SESSION['userID'];
 
-if ($_SESSION['role'] == 2) {
-    $title="My profile";
-}elseif($_SESSION['role'] == 3) {
-    if(isset($_GET['userID']) && isset($_GET['action'])){
-        $title="Managing user profile";
+if ($_SESSION['role'] > 1) { //if logged in
 
-        if($_GET['action']==1){
+    if ($_SESSION['role'] == 4 && isset($_GET['userID'])) { //if admin is managing a user's profile
+        $userID = $_GET['userID'];
 
-        }elseif ($_GET['action']==2){
+        $conn = connect2db();
+        $stmt = $conn->prepare("SELECT * FROM teacher WHERE userID = ?");
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $teacherType = $stmt->get_result()->fetch_assoc();
+        $conn->close();
 
-        }else{
-            header("Location: index-EN.php");
-        }
-    }else{
-        $title="My profile";
     }
-}else{
-    header("Location: index-EN.php");
+
+} else {
+    $_SESSION['notification']['title'] = "Oops..";
+    $_SESSION['notification']['message'] = "You have to be logged in to see that page";
+    header("Location: index-en.php");
 }
+
+$userProfile = loadUserProfile($userID);
+$name = $userProfile['name'];
+$email = $userProfile['email'];
+$department = $userProfile['department'];
+
+function loadUserProfile($profileID)
+{
+    //any user viewing their profile
+    $conn = connect2db();
+    $stmt = $conn->prepare("SELECT name, email, department FROM user WHERE id = ?");
+    $stmt->bind_param("i", $profileID);
+    $stmt->execute();
+    $userData = $stmt->get_result()->fetch_assoc();
+    $conn->close();
+    return $userData;
+}
+
 $navTitle = $title;
 ?>
 
@@ -50,16 +70,96 @@ $navTitle = $title;
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <?php require_once "sidebar-EN.php" ?>
+    <?php require_once "sidebar-EN.php"; ?>
 
     <!-- Page Content -->
     <div id="content">
-        <?php require_once "navbar-EN.php" ?>
+        <?php require_once "navbar-EN.php"; ?>
+        <?php require_once "modal.php"; ?>
 
-        <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
+        <div class="container px-4 mt-4">
 
+            <div class="col-xl-8">
+                <!-- Account details card-->
+                <div class="card mb-4 " id="profile">
+                    <div class="card-header"><strong>Profile Details</strong></div>
+                    <div class="card-body">
+                        <form id="profileForm" action="manage_user_script.php" method="post">
+
+                            <input class="form-control" id="userID" type="text" style="display: none"
+                                   name="userID" value="<?php echo $userID; ?>" required>
+
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="name">Full Name</label>
+                                    <input class="form-control" id="name" type="text"
+                                           placeholder="Enter your full name" name="name" value="<?php echo $name; ?>"
+                                           required>
+                                </div>
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="email">Email address</label>
+                                    <input class="form-control" id="email" type="email"
+                                           placeholder="Enter your email address" name="email"
+                                           value="<?php echo $email; ?>" required>
+                                </div>
+                            </div>
+
+                            <!-- Form Group (username)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="dept">Department name</label>
+                                <input class="form-control" id="dept" type="text"
+                                       placeholder="Enter your department name" name="dept"
+                                       value="<?php echo $department; ?>" required>
+                            </div>
+
+                            <?php if (isset($teacherType)) { ?>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="teacherType" value="dep"
+                                               id="dep" <?php if ($teacherType['dep']) echo "checked "; ?>>
+                                        <label class="form-check-label" for="dep">
+                                            DEP
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="teacherType" value="edip"
+                                               id="edip" <?php if ($teacherType['edip']) echo "checked "; ?>>
+                                        <label class="form-check-label" for="edip">
+                                            EDIP
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="teacherType" value="etep"
+                                               id="etep" <?php if ($teacherType['etep']) echo "checked "; ?>>
+                                        <label class="form-check-label" for="etep">
+                                            ETEP
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-9">
+                                    <button id="saveBtn" class="btn btn-primary" name="save" type="submit">
+                                        <i class="fas fa-save me-2"></i> Save Changes
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button id="deleteBtn" class="btn btn-danger"
+                                            name="delete" type="submit">
+                                        <i class="fas fa-user-times"></i> Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 
 </div>
 

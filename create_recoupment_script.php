@@ -2,8 +2,6 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-printArray($_POST);
-
 $conn = connect2db();
 $stmt = $conn->prepare("select start_date from reservation where id=?");
 $initial_date=sanitize($_POST['initial-reservation']);
@@ -19,7 +17,7 @@ $sql="insert into recoupment_requests(userID, request_start, date_lost, date_rec
  values(?, str_to_date(?,'%Y-%m-%d'), str_to_date(?,'%Y-%m-%d'), ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
-$userID=$_SESSION['userID'];
+$userID = sanitize($_POST['teacher']) ?? $_SESSION['userID'];
 if(isset($_POST['userID'])) $userID=sanitize($_POST['userID']);
 $date_lost=date_create(sanitize($_POST['date_lost']));
 $date_lost=date_format($date_lost,"Y-m-d");
@@ -32,9 +30,11 @@ $duration=sanitize($_POST['duration']);
 $stmt->bind_param("isssisi", $userID, $start_date['start_date'], $date_lost, $recoupment_date, $classID, $start_time, $duration);
 
 if($stmt->execute()){
-    echo "success";
+    $_SESSION['notification']['title'] = 'Success!';
+    $_SESSION['notification']['message'] = "The recoupment you requested ha been submitted.";
 }else{
-    echo "fail";
+    $_SESSION['notification']['title'] = 'Oops...';
+    $_SESSION['notification']['message'] = "The recoupment you requested could not be completed.";
 }
 
 $conn->close();

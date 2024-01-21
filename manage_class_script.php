@@ -9,9 +9,11 @@ if ($_SESSION['role'] > 2) {
         $stmt = $conn->prepare("delete from classroom where id = ?");
         $stmt->bind_param("i", $_POST['delete']);
         if ($stmt->execute()) {
-            $_SESSION['notification'] = 'createSuccessAlert("Deleted","Classroom Successfully Deleted")';
+            $_SESSION['notification']['title'] = "Success!";
+            $_SESSION['notification']['message'] = "Class was successfully deleted!";
         } else {
-            echo "could not delete";
+            $_SESSION['notification']['title'] = "Oops";
+            $_SESSION['notification']['message'] = "Class could not be deleted!";
         }
         $conn->close();
     } else {
@@ -68,12 +70,15 @@ if ($_SESSION['role'] > 2) {
 
         if ($stmt->execute()) {
             if (strcmp($_POST['action'], "create") == 0) {
-                echo "class created";
+                $_SESSION['notification']['title'] = "Success!";
+                $_SESSION['notification']['message'] = "Class ".$_POST['name']." in ".$_POST['building']." was created!";
             } else {
-                echo "class " . $_POST['name'] . " edited";
+                $_SESSION['notification']['title'] = "Success!";
+                $_SESSION['notification']['message'] = "Changes in class ".$_POST['name']." have been saved!";
             }
         } else {
-            echo $stmt->error;
+            $_SESSION['notification']['title'] = "Oops...";
+            $_SESSION['notification']['message'] = "Class could not be created!";
         }
 
         $conn->close();

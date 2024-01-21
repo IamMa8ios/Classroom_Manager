@@ -93,6 +93,7 @@ if (isset($_POST['classroom'])) {
     <!-- Page Content -->
     <div id="content">
         <?php require_once "navbar-EN.php" ?>
+        <?php require_once "modal.php" ?>
 
         <?php if (isset($_POST['classroom'])) { ?>
             <!-- FullCalendar -->
@@ -182,18 +183,6 @@ if (isset($_POST['classroom'])) {
 
         calendar.render();
     });
-</script>
-
-<script>
-    // FIXME: must have in all pages, that's how notifs work
-
-    window.addEventListener('load', function () {
-        <?php if (isset($_SESSION['notification'])) {
-        echo $_SESSION['notification'];
-        unset($_SESSION['notification']);
-    }?>
-    })
-
 </script>
 
 <script src='js/main.js'></script>

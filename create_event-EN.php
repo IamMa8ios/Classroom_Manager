@@ -51,8 +51,6 @@ if ($_SESSION['role'] > 1) {
         $formTitle = "New Event";
 
         // For recoupments
-        //FIXME: If admin -> select teacher (dropdown)
-        //userID request_timestamp status request_start date_lost date_recouped classroomID start_time duration
 
         // get all starting and ending dates for each event
         $conn = connect2db();
@@ -85,9 +83,6 @@ if ($_SESSION['role'] > 1) {
             }
         }
 
-        // date lost -> dropdown of all dates until end date (if repeatable)
-        // date recouped = date selected from calendar
-
     }elseif (isset($_GET['eventID']) && $_SESSION['role']==3){
         $action="edit";
         $navTitle = "Editing Event";
@@ -101,15 +96,7 @@ if ($_SESSION['role'] > 1) {
         $event = $result->fetch_assoc();
         $conn->close();
 
-        $conn = connect2db();
-        $stmt = $conn->prepare("select * from user where roleID=2");
-        $stmt->execute();
-        $result = $stmt->get_result(); // get the mysqli result
-        $teachers=array();
-        while ($teacher = $result->fetch_assoc()) {
-            array_push($teachers, $teacher);
-        }
-        $conn->close();
+
 
         $startDate=$event['start_date'];
         $endDate=$event['end_date'];
@@ -118,6 +105,16 @@ if ($_SESSION['role'] > 1) {
     }else{
         header("Location: index-EN.php");
     }
+
+    $conn = connect2db();
+    $stmt = $conn->prepare("select * from user where roleID=2");
+    $stmt->execute();
+    $result = $stmt->get_result(); // get the mysqli result
+    $teachers=array();
+    while ($teacher = $result->fetch_assoc()) {
+        $teachers[] = $teacher;
+    }
+    $conn->close();
 } else {
     header("Location: index-EN.php");
 }
@@ -153,6 +150,7 @@ if ($_SESSION['role'] > 1) {
     <!-- Page Content -->
     <div id="content">
         <?php require_once "navbar-EN.php"; ?>
+        <?php require_once "modal.php"; ?>
 
         <?php if (!isset($_GET['eventID'])) { ?>
 
@@ -168,9 +166,9 @@ if ($_SESSION['role'] > 1) {
                     <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
 
-                            <div class="container mt-5 bg-purple-svg" id="create-event-container">
+                            <div class="container mt-2 bg-purple-svg" id="create-event-container">
 
-                                <div class="row container" id="create-event-fields">
+                                <div class="row " id="create-event-fields">
                                     <form id="create_event_form" action="create_event_script.php" method="post">
                                         <input type="text" class="form-control" name="classID" id="classID"
                                                value="<?php echo $_SESSION['classID']; ?>" style="display: none" required readonly>
@@ -315,7 +313,7 @@ if ($_SESSION['role'] > 1) {
                         <div id="flush-collapseTwo" class="accordion-collapse collapse"
                              data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <div class="mt-5 bg-purple-svg" id="create-recoupment-container">
+                                <div class="mt-2 bg-purple-svg" id="create-recoupment-container">
                                     <form class="container p-2" id="recoupment_form" action="create_recoupment_script.php" method="post">
                                         <div class="row g-3 my-3 bg-purple-svg" id="recoupment-fields">
 
@@ -368,6 +366,22 @@ if ($_SESSION['role'] > 1) {
                                                 </div>
                                             </div>
 
+                                            <?php if($_SESSION['role']==3){ ?>
+                                            <div class="col-md-6 my-3">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="teacher">Teacher</label>
+                                                    <select class="form-select" name="teacher" id="teacher"
+                                                            required>
+                                                        <?php foreach ($teachers as $teacher) {  ?>
+                                                                <option id="teacher-<?php echo $teacher['id']; ?>" value="<?php echo $teacher['id']; ?>">
+                                                                    <?php echo $teacher['name']; ?>
+                                                                </option>
+                                                            <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+
                                             <div class="col-md-6 my-3">
                                                 <div class="input-group">
                                                     <label class="input-group-text" for="start-time">Start Time</label>
@@ -378,7 +392,7 @@ if ($_SESSION['role'] > 1) {
 
                                             <div class="col-md-6 my-3">
                                                 <div class="input-group">
-                                                    <label class="input-group-text" for="duration">Duration                                                        Duration</label>
+                                                    <label class="input-group-text" for="duration">Duration</label>
                                                     <input type="number" class="form-control" name="duration"
                                                            id="duration" min="1" max="3" step="0.5" required>
                                                 </div>
@@ -419,6 +433,8 @@ if ($_SESSION['role'] > 1) {
             </div>
 
         <?php } ?>
+
+
     </div>
 
 
@@ -447,9 +463,7 @@ if ($_SESSION['role'] > 1) {
         }
 
         updateOptions();
-        //FIXME: Add notifications
     </script>
-
 
     <script src='js/main.js'></script>
 </body>

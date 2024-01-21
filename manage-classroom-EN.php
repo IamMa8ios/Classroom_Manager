@@ -58,11 +58,12 @@ $navTitle = $title;
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <?php require_once "sidebar-EN.php" ?>
+    <?php require_once "sidebar-EN.php"; ?>
 
     <!-- Page Content -->
     <div id="content">
-        <?php require_once "navbar-EN.php" ?>
+        <?php require_once "navbar-EN.php"; ?>
+        <?php require_once "modal.php"; ?>
 
         <div class="container mt-5 p-3 bg-purple-svg" id="create-event-container">
             <form id="create_class_form" action="manage_class_script.php" method="post">
@@ -181,7 +182,7 @@ $navTitle = $title;
                 <?php //FIXME:load "computers" on edit on load ?>
                 <div class="row g-3 my-3">
                     <div class="col-md-6">
-                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" <?php if(isset($classData) && $classData['type'] == 1) echo 'checked';?>
+                        <input class="lab-switch" type="checkbox" id="lab-switch-toggle" <?php if(isset($classData) && $classData['type'] == 0) echo 'checked';?>
                                onclick="handleLabTheorySwitch('lab-switch-toggle','lab-capacity')" data-theory="Theory"
                                data-lab="Lab">
                     </div>
@@ -221,15 +222,13 @@ $navTitle = $title;
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
-    // FIXME: must have in all pages, that's how notifs work
-
-    window.addEventListener('load', function () {
-        <?php if (isset($_SESSION['notification'])) {
-        echo $_SESSION['notification'];
-        unset($_SESSION['notification']);
-    }?>
-    })
-
+    $('#lab-switch-toggle').click(function(){
+        if ($(this).is(':checked')) {
+            $('#lab-capacity').removeClass('visually-hidden'); // checked
+        } else {
+            $('#lab-capacity').addClass('visually-hidden'); //unchecked
+        }
+    });
 </script>
 <script src='js/main.js'></script>
 </body>

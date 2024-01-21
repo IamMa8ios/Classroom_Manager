@@ -15,16 +15,18 @@ if (isset($_POST['register'])) {
 
     // Check if the email is already registered
     $conn = connect2db();
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
-    $stmt->bind_param("s", $email);
+    $stmt = $conn->prepare("SELECT COUNT(id) as total FROM user WHERE email = ?");
+    $stmt->bind_param("s", $_POST['email']);
     $stmt->execute();
     $result = $stmt->get_result();
+    $total = $result->fetch_assoc()['total'];
+    echo $total;
 
-    if ($result->num_rows > 0) {
-        $_SESSION['notification'] = 'createErrorAlert("Sorry!", "This email is already in use!")';
+    if ($total>0) {
+        $_SESSION['notification']['title'] = 'Sorry!';
+        $_SESSION['notification']['message'] = "This email is already in use!";
         $_SESSION['role'] = 1;
     } else {
-
         $email = sanitize($_POST['email']);
         $password = password_hash(sanitize($_POST['password']), PASSWORD_DEFAULT);
         $name = sanitize($_POST['name']);
@@ -39,10 +41,26 @@ if (isset($_POST['register'])) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['dept'] = $dept;
+
+            $stmt->close();
+            $conn->close();
+
+            $conn = connect2db();
+            $stmt = $conn->prepare("SELECT id FROM user WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $_SESSION['userID'] = $result->fetch_assoc()['id'];
+
+            $stmt->close();
+            $conn->close();
+            $_SESSION['notification']['title'] = "Registration Successful!";
+            $_SESSION['notification']['message'] = "Welcome, ".$_SESSION['name'];
             header("Location: index-EN.php");
         } else {
             $_SESSION['role'] = 1;
-            $_SESSION['notification'] = 'createErrorAlert("Oops...", "Something went wrong! If this error persists, contact and administrator.")';
+            $_SESSION['notification']['title'] = "Oops...";
+            $_SESSION['notification']['message'] = "Something went wrong! If this error persists, contact and administrator.";
         }
     }
 
@@ -74,14 +92,20 @@ if (isset($_POST['login'])) {
             $_SESSION['dept'] = $row['department'];
             $_SESSION['userID'] = $row['id'];
             $_SESSION['role'] = $row['roleID'];
-            $_SESSION['notification'] = 'createSuccessAlert("Success", "Welcome, '.$_SESSION['name'].'")';
+            $_SESSION['notification']['title'] = "Successful Login";
+            $_SESSION['notification']['message'] = "Welcome, ".$_SESSION['name'];
+
+            $stmt->close();
+            $conn->close();
             header("Location: index-EN.php");
         } else {
-            $_SESSION['notification'] = 'createErrorAlert("Oops...", "Your password is wrong")';
+            $_SESSION['notification']['title'] = "Oops...";
+            $_SESSION['notification']['message'] = "Your password is wrong";
             $_SESSION['role'] = 1;
         }
     } else {
-        $_SESSION['notification'] = 'createErrorAlert("Oops...", "Your email is wrong")';
+        $_SESSION['notification']['title'] = "Oops...";
+        $_SESSION['notification']['message'] = "Your email is wrong!";
         $_SESSION['role'] = 1;
     }
 
@@ -121,6 +145,7 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
+<?php require_once "modal.php"; ?>
     <div class="section">
         <div class="container">
             <div class="row full-height justify-content-center">

@@ -159,7 +159,8 @@ body {
 #profile .card-body,
 .accordion-collapse,
 #accordionFlushExample,
-.swal2-popup.swal2-modal {
+.swal2-popup.swal2-modal,
+.setting-dropdown-menu{
     background-color: var(--svg-background);
     background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
     background-position: bottom center;
@@ -585,4 +586,19 @@ input.lab-switch:checked::after {
 .swal2-popup.swal2-modal button.swal2-confirm:hover,
 .swal2-popup.swal2-modal button.swal2-confirm:focus{
     outline: 1px solid var(--white-ish);
+}
+.setting-dropdown-menu  a{
+    color: var(--white-ish);
+}
+#profile.card.mb-4 input,
+#profile.card.mb-4 input::placeholder{
+    color: var(--white-ish);
+}
+#profileForm #deleteBtn{
+    background: darkred;
+    color: var(--white-ish);
+    box-shadow: none;
+}
+#profileForm #deleteBtn:hover{
+    box-shadow: inset 0 0 .5em var(--dark-purple);
 }
