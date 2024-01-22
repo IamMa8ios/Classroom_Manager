@@ -3,45 +3,59 @@ require_once "session_manager.php";
 require_once "db_connector.php";
 require_once "date_repeater.php";
 
-if ($_SESSION['role'] > 1) {
+if ($_SESSION['role'] > 1) { //Για να μπορεί γίνει κάνει κράτηση, ο χρήστης θα πρέπει να είναι συνδεδεμένος
 
     $conn = connect2db();
     $sql="";
+
+    //Εάν πρόκειται για καθηγητή, θα μπορεί να επιλέξει μόνο τα δικά του μαθήματα
     if($_SESSION['role']==2){
         $sql="select * from lecture where userID = ?";
     }elseif ($_SESSION['role']==3){
+        //Αλλιώς, ο διαχειριστής έχει τη δυνατότητα να αναθέσει όποιο μάθημα θέλει σε όποιον καθηγητή θέλει
         $sql="select * from lecture";
     }else{
+        //Αλλιώς αν είναι διαχειριστής χρηστών, δε θα μπορεί να κάνει κρατήσεις
         header("Location: index-EN.php");
     }
+
     $stmt = $conn->prepare($sql);
+
+    //εάν είναι καθηγητής, δίνουμε το id του για να γίνει το φιλτράρισμα
     if ($_SESSION['role']==2){
         $stmt->bind_param("i", $_SESSION['userID']);
     }
+
     $stmt->execute();
-    $result = $stmt->get_result(); // get the mysqli result
+    $result = $stmt->get_result(); //παίρνουμε τα μαθήματα από τη βάση δεδομένων
+
+    //τα κρατάμε σε έναν πίνακα
     $lectures = array();
     while ($lecture = $result->fetch_assoc()) {
         $lectures[] = $lecture;
     }
+
     $conn->close();
 
+    //αρχικοποιούμε τα πεδία για τη φόρμα
     $action=$startDate=$endDate=$startTime="";
     $duration=0;
     $defaultLecture=$lectures[0];
 
-    if (isset($_GET['date'])) {
-        $action="create";
-        $startDate = $_GET['date'];
+    if (isset($_GET['date'])) { //ελέγχουμε εάν έχει δωθεί ημερομηνία κράτησης από το ημερολόγιο
 
-        // For new event
+        $action="create"; //εάν δόθηκε ημερομηνία, θεωρούμε ότι πρόκειται για νέα κράτηση
+        $startDate = sanitize($_GET['date']);
+
+        // ----------------------------------Νέα Κράτηση----------------------------------
+        //Παίρνουμε τις διαθέσιμες ώρες της αίθουσας από τη βάση δεδομένων
         $conn = connect2db();
         $stmt = $conn->prepare("select time_available_start as `start`, time_available_end as `end` from classroom where id = ?");
         $stmt->bind_param("i", $_SESSION['classID']);
         $stmt->execute();
         $time = $stmt->get_result()->fetch_assoc(); // get the mysqli result
         $conn->close();
-
+        //Ορίζουμε το νωρίτερο και το αργότερο που μπορεί να ξεκινήσει μια κράτηση με βάση τη διαθεσιμότητά της
         $minStart = $time['start'];
         $maxStart = DateTime::createFromFormat('H:i:s', $time['end']);
         $maxStart->modify('-1 hours');
@@ -49,10 +63,13 @@ if ($_SESSION['role'] > 1) {
 
         $navTitle = "Creating New Event";
         $formTitle = "New Event";
+        // ----------------------------------Νέα Κράτηση----------------------------------
 
-        // For recoupments
+        // ----------------------------------Αναπλήρωση----------------------------------
+        //Αν πρόκειται για αναπλήρωση, θα πρέπει να βρεθούν όλες οι ημερομηνίες διαλέξεων
+        // (δηλαδή και οι ακόλουθες ημερομηνίες για όσες διαλέξεις που επαναλαμβάνονται)
 
-        // get all starting and ending dates for each event
+        //Αρχικά, βρίσκουμε τις κρατήσεις που έχουν γίνει
         $conn = connect2db();
         $sql="select id, start_date as `start`, end_date as `end`, lectureID, repeatable from reservation";
         if($_SESSION['role']==2) $sql=$sql." where userID=?";
@@ -66,16 +83,18 @@ if ($_SESSION['role'] > 1) {
         }
         $conn->close();
 
-        //get lecture name for event
+        //Για κάθε κράτηση, πρέπει να βρούμε τη διάλεξη την οποία αφορά, ώστε να εμφανίσουμε το όνομα του μαθήματος
+        //Οπότε, για κάθε κράτηση, ελέγχουμε κάθε διάλεξη μέχρι να ταιριάξουν τα id των διαλέξεων
         foreach ($originalEvents as $key=>$event){
             foreach ($lectures as $lecture){
-//                echo $lecture['id']==$event['lectureID']?"matched":"not matched";
                 if($lecture['id']==$event['lectureID']){
                     $originalEvents[$key]['lecture']=$lecture['name'];
                     break;
                 }
             }
 
+            //Εάν μια κράτηση είναι επαναλαμβανόμενη, φέρνουμε και τις ενδιάμεσες ημερομηνίες, αλλιώς μεταφέρουμε
+            // την έναρξή της σε πίνακα για να διατηρηθεί η ομοιομορφία
             if($event['repeatable']){
                 $originalEvents[$key]['possible_dates']=getDatesBetween($event['start'], $event['end']);
             }else{
@@ -84,37 +103,45 @@ if ($_SESSION['role'] > 1) {
         }
 
     }elseif (isset($_GET['eventID']) && $_SESSION['role']==3){
+        //Εάν δόθηκε id για κράτηση, τότε θεωρούμε ότι κάποιος διαχειριστής κρατήσεων θέλει να την επεξεργαστεί
         $action="edit";
         $navTitle = "Editing Event";
         $formTitle = "Edit Event";
+        $eventID=sanitize($_GET['eventID']);
 
+        //Παίρνουμε τα δεδομένα από τη βάση δεδομένων
         $conn = connect2db();
         $stmt = $conn->prepare("select * from reservation where id=?");
-        $stmt->bind_param("i", $_GET['eventID']);
+        $stmt->bind_param("i", $eventID);
         $stmt->execute();
-        $result = $stmt->get_result(); // get the mysqli result
+        $result = $stmt->get_result();
         $event = $result->fetch_assoc();
         $conn->close();
 
-
-
+        //Μεταφέρουμε στα πεδία της φόρμας τα δεδομένα μας
         $startDate=$event['start_date'];
         $endDate=$event['end_date'];
         $startTime=$event['start_time'];
         $duration=$event['duration'];
+
     }else{
+        //Αλλιώς ο χρήστης προσπάθησε να έρθει αθέμιτα, οπότε τον μεταφέρουμε στην αρχική
         header("Location: index-EN.php");
     }
 
-    $conn = connect2db();
-    $stmt = $conn->prepare("select * from user where roleID=2");
-    $stmt->execute();
-    $result = $stmt->get_result(); // get the mysqli result
-    $teachers=array();
-    while ($teacher = $result->fetch_assoc()) {
-        $teachers[] = $teacher;
+    //Εάν πρόκειται για διαχειριστή, θα πρέπει να μπορεί να επιλέξει όποιον καθηγητή θέλει για να κάνει τη διάλεξη / αναπλήρωση
+    if ($_SESSION['role']==3){
+        $conn = connect2db();
+        $stmt = $conn->prepare("select * from user where roleID=2");
+        $stmt->execute();
+        $result = $stmt->get_result(); // get the mysqli result
+        $teachers=array();
+        while ($teacher = $result->fetch_assoc()) {
+            $teachers[] = $teacher;
+        }
+        $conn->close();
     }
-    $conn->close();
+
 } else {
     header("Location: index-EN.php");
 }
@@ -152,8 +179,6 @@ if ($_SESSION['role'] > 1) {
         <?php require_once "navbar-EN.php"; ?>
         <?php require_once "modal.php"; ?>
 
-        <?php if (!isset($_GET['eventID'])) { ?>
-
             <div class="accordion accordion-flush mt-4 container p-4" id="accordionFlushExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header" style="border-top-left-radius: 999em; border-top-right-radius: 999em;">
@@ -163,6 +188,7 @@ if ($_SESSION['role'] > 1) {
                             Create Event
                         </button>
                     </h2>
+<!-- --------------------------------------Δημιουργία/Επεξεργασία Κράτησης-------------------------------------- -->
                     <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
 
@@ -310,6 +336,7 @@ if ($_SESSION['role'] > 1) {
                                 Create Recoupment
                             </button>
                         </h2>
+<!-- --------------------------------------Δημιουργία/Επεξεργασία Αναπλήρωσης-------------------------------------- -->
                         <div id="flush-collapseTwo" class="accordion-collapse collapse"
                              data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
@@ -415,25 +442,9 @@ if ($_SESSION['role'] > 1) {
                             </div>
                         </div>
                     </div>
-                    <!--            <div class="accordion-item">-->
-                    <!--                <h2 class="accordion-header">-->
-                    <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">-->
-                    <!--                        Accordion Item #3-->
-                    <!--                    </button>-->
-                    <!--                </h2>-->
-                    <!--                <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">-->
-                    <!--                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>-->
-                    <!--                </div>-->
-                    <!--            </div>-->
                 </div>
 
-
-
-
             </div>
-
-        <?php } ?>
-
 
     </div>
 
@@ -443,15 +454,18 @@ if ($_SESSION['role'] > 1) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script>
-        // Function to update options in mySelect based on the selected option in groups
+        //Κάθε φορά που αλλάζει η ημερομηνία έναρξης μιας κράτησης, θα πρέπει να ενημερώνονται και οι
+        // ημερομηνίες που μπορεί να χάθηκαν, ώστε να αναπληρωθεί η κατάλληλη διάλεξη
         function updateOptions() {
+            //Παίρνουμε το id της κράτησης από το select που έχει τις αρχικές κρατήσεις
             var original_events = document.getElementById('initial-reservation');
             var eventID = original_events.value;
 
+            //Παίρνουμε κάθε δυνατή ημερομηνία που υπάρχει για διάλεξη από το αντίστοιχο select
             var possible_dates = document.getElementById('date_lost');
             var options = possible_dates.getElementsByTagName('option');
 
-
+            //Και εμφανίζουμε όσες αφορούν την κράτηση που μας ενδιαφέρει και κρύβουμε όλες τις υπόλοιπες
             for (var i = 0; i < options.length; i++) {
                 var option = options[i];
                 if (option.id===eventID) {

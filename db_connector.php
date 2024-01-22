@@ -8,6 +8,7 @@ function connect2db(){
         session_start();
     }
 
+    //ορίζουμε το όνομα του χρήστη που θα συνδεθεί στη βάση δεδομένων με βάση το ρόλο του χρήστη
     if(isset($_SESSION['role'])){
         if($_SESSION['role']==1){
             $username="guest_user";
@@ -18,11 +19,12 @@ function connect2db(){
         }elseif($_SESSION['role']==4){
             $username="teacher_admin_user";
         }
-    }else{
+    }else{//εάν δεν έχει ξεκινήσει κάποιο session, θεωρούμε ότι πρόκειται για επισκέπτη
         $_SESSION['role']=1;
         $username="guest_user";
     }
-        $password = "123456";
+    //Για απλότητα, ο κωδικός είναι κοινός για όλους
+    $password = "123456";
 
 // Create connection
     $conn = new mysqli($servername, $username, $password);
@@ -35,6 +37,7 @@ function connect2db(){
     return $conn;
 }
 
+//Βοηθητικές μέθοδοι
 function sanitize($data){
     return htmlspecialchars(stripslashes(trim($data)));
 }

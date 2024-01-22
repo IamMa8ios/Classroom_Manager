@@ -2,11 +2,9 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-printArray($_POST);
+if ($_SESSION['role'] == 3) { // role = res_admin
 
-if ($_SESSION['role'] == 3) {
-
-    if(isset($_POST['deny'])){
+    if(isset($_POST['deny'])){ // deny recoupment request
 
         $requestID=$status=$notes="";
         $requestID=$_POST['deny'];
@@ -19,7 +17,7 @@ if ($_SESSION['role'] == 3) {
             header("Location: user-dashboard-EN.php");
         }
 
-    }elseif (isset($_POST['approve'])){
+    }elseif (isset($_POST['approve'])){ // // approve recoupment request
         $requestID=$_POST['approve'];
         $status=1;
     }
@@ -28,7 +26,7 @@ if ($_SESSION['role'] == 3) {
     $stmt = $conn->prepare("UPDATE recoupment_requests SET status=?, notes=? WHERE id=?");
     $stmt->bind_param("isi", $status, $notes, $requestID);
 
-    if($stmt->execute()){
+    if($stmt->execute()){ // sql query ok
         $_SESSION['notification']['title'] = "Success!";
         $msg="Recoupment was ";
     }else{

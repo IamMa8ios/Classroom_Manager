@@ -2,10 +2,12 @@
 require_once "db_connector.php";
 require_once "session_manager.php";
 
-if($_SESSION['role']==4) {
-    if (isset($_POST['save'])) { //Edit user
+if($_SESSION['role']==4) { //Για τους χρήστες υπάρχει ο κατάλληλος διαχειριστής
 
-        if (isset($_POST['teacherType'])) { //if editing teacher profile
+    if (isset($_POST['save'])) { //Αν πρόκειται για ενημέρωση των στοιχείων ενός χρήστη
+
+        //ελέγχουμε εάν πρόκειται για καθηγητή ώστε να ενημερώσουμε και τον αποκλειστικό τους πίνακα
+        if (isset($_POST['teacherType'])) {
             $conn = connect2db();
             $stmt = $conn->prepare("SELECT COUNT(*) as total FROM teacher WHERE userID = ?");
             $stmt->bind_param("i", $_POST['userID']);
@@ -27,7 +29,8 @@ if($_SESSION['role']==4) {
                 $sql = $sql . " where userID=?";
 
             } else {
-                $sql = "insert into teacher(" . $_POST['teacherType'] . ", userID) values(1, ?)";
+                //εάν δεν υπήρχαν στοιχεία καταχωρούμε αυτά που δόθηκαν
+                $sql = "insert into teacher(" . sanitize($_POST['teacherType']) . ", userID) values(1, ?)";
             }
 
             $conn = connect2db();
@@ -43,6 +46,7 @@ if($_SESSION['role']==4) {
             $conn->close();
         }
 
+        //ενημέρωση των γενικών στοιχείων του χρήστη
         $conn = connect2db();
         $stmt = $conn->prepare("update user set name=?, email=?, department=? where id=?");
         $stmt->bind_param("sssi", $_POST['name'], $_POST['email'], $_POST['dept'], $_POST['userID']);
@@ -55,10 +59,10 @@ if($_SESSION['role']==4) {
         }
         $conn->close();
 
-    }elseif (isset($_POST['delete'])){ //Delete user
+    }elseif (isset($_POST['delete'])){ //Διαγραφή χρήστη. Εάν πρόκειται για καθηγητή, υπάρχει cascade
         $conn = connect2db();
-        $stmt = $conn->prepare("DELETE FROM user WHERE userID = ?");
-        $stmt->bind_param("i", $_GET['userID']);
+        $stmt = $conn->prepare("DELETE FROM user WHERE id = ?");
+        $stmt->bind_param("i", $_POST['userID']);
         if ($stmt->execute()) {
             $_SESSION['notification']['title'] = "Success!";
             $_SESSION['notification']['message'] = "User was deleted!";

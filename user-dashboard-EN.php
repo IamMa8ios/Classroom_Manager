@@ -56,6 +56,7 @@ $recoupmentStatus[] = "Pending";
 $recoupmentStatus[] = "Approved";
 $recoupmentStatus[] = "Denied";
 
+//FIXME: deny recoupment
 ?>
 
 <!DOCTYPE html>
@@ -138,87 +139,92 @@ $recoupmentStatus[] = "Denied";
                 </table>
 
             </div>
-        <?php }else{ ?>
-        <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
+        <?php } else { ?>
+            <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
 
-            <h2 class="my-3">Recoupment Requests</h2>
+                <h2 class="my-3">Recoupment Requests</h2>
 
-            <table id="recoupmentDataTable" class="table table-striped" style="width:100%">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Starting Lecture Date</th>
-                    <th>Date Lost</th>
-                    <th>Recoupment Date</th>
-                    <th>Classroom</th>
-                    <th>Start Time</th>
-                    <th>Duration</th>
-                    <th>Notes</th>
-                    <?php if ($_SESSION['role'] == 3) { ?>
-                        <th>Actions</th>
-                    <?php } ?>
-                </tr>
-                </thead>
-                <tbody>
-
-                <?php foreach ($recoupments as $recoupment) { ?>
+                <table id="recoupmentDataTable" class="table table-striped" style="width:100%">
+                    <thead>
                     <tr>
-                        <td><?php echo $recoupment['id']; ?></td>
-                        <td class="<?php echo $recoupmentStatus[$recoupment['status']]; ?>"><?php echo $recoupmentStatus[$recoupment['status']]; ?></td>
-                        <td><?php echo $recoupment['request_start']; ?></td>
-                        <td><?php echo $recoupment['date_lost']; ?></td>
-                        <td><?php echo $recoupment['date_recouped']; ?></td>
-                        <td><?php foreach ($allClasses as $class) {
-                                if ($class['id'] == $recoupment['classroomID']) {
-                                    echo $class['name'];
-                                    break;
-                                }
-                            } ?></td>
-                        <td><?php echo $recoupment['start_time']; ?></td>
-                        <td><?php echo $recoupment['duration']; ?> hour(s)</td>
-                        <td>
-                            <button id="edit-a" class="btn rounded-4" data-bs-toggle="modal"
-                                    data-bs-target=".view-notes-modal"><i class="far fa-eye me-2"></i>View
-                            </button>
-                        </td>
-
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Starting Lecture Date</th>
+                        <th>Date Lost</th>
+                        <th>Recoupment Date</th>
+                        <th>Classroom</th>
+                        <th>Start Time</th>
+                        <th>Duration</th>
+                        <th>Notes</th>
                         <?php if ($_SESSION['role'] == 3) { ?>
-                            <td>
-                                <form action="manage_recoupment_script.php" method="post">
-                                    <button class="btn rounded-4" id="edit-a" name="approve"
-                                            value="<?php echo $recoupment['id']; ?>"><i
-                                                class="fas fa-check-circle me-2"></i>Approve</button>
-                                </form>
-                                <a class="btn rounded-4" id="delete-a" data-bs-toggle="modal" onclick="transferModalData()"
-                                   data-bs-target=".denyBtn-modal" data-recoupmentID="<?php echo $recoupment['id']; ?>">
-                                    <i class="fas fa-trash-alt me-2"></i>Deny</a>
-                            </td>
-
+                            <th>Actions</th>
                         <?php } ?>
                     </tr>
-                <?php } ?>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Starting Lecture Date</th>
-                    <th>Date Lost</th>
-                    <th>Recoupment Date</th>
-                    <th>Classroom</th>
-                    <th>Start Time</th>
-                    <th>Duration</th>
-                    <th>Notes</th>
-                    <?php if ($_SESSION['role'] == 3) { ?>
-                        <th>Actions</th>
+                    <?php foreach ($recoupments as $recoupment) { ?>
+                        <tr>
+                            <td><?php echo $recoupment['id']; ?></td>
+                            <td class="<?php echo $recoupmentStatus[$recoupment['status']]; ?>"><?php echo $recoupmentStatus[$recoupment['status']]; ?></td>
+                            <td><?php echo $recoupment['request_start']; ?></td>
+                            <td><?php echo $recoupment['date_lost']; ?></td>
+                            <td><?php echo $recoupment['date_recouped']; ?></td>
+                            <td><?php foreach ($allClasses as $class) {
+                                    if ($class['id'] == $recoupment['classroomID']) {
+                                        echo $class['name'];
+                                        break;
+                                    }
+                                } ?></td>
+                            <td><?php echo $recoupment['start_time']; ?></td>
+                            <td><?php echo $recoupment['duration']; ?> hour(s)</td>
+                            <td>
+                                <button id="edit-a" class="btn rounded-4" data-bs-toggle="modal"
+                                        onclick="transferViewData(this)"
+                                        data-viewNotes="<?php echo $recoupment['notes']; ?>"
+                                        data-bs-target=".view-notes-modal"><i class="far fa-eye me-2"></i>View
+                                </button>
+                            </td>
+
+                            <?php if ($_SESSION['role'] == 3) { ?>
+                                <td>
+                                    <form action="manage_recoupment_script.php" method="post">
+                                        <button class="btn rounded-4" id="edit-a" name="approve"
+                                                value="<?php echo $recoupment['id']; ?>"><i
+                                                    class="fas fa-check-circle me-2"></i>Approve
+                                        </button>
+                                    </form>
+                                    <a class="btn rounded-4" id="delete-a" data-bs-toggle="modal"
+                                       onclick="transferRecoupmentID(this)"
+                                       data-bs-target=".denyBtn-modal"
+                                       data-recoupmentID="<?php echo $recoupment['id']; ?>">
+                                        <i class="fas fa-trash-alt me-2"></i>Deny</a>
+                                </td>
+
+                            <?php } ?>
+                        </tr>
                     <?php } ?>
-                </tr>
-                </tfoot>
-            </table>
 
-        </div>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Starting Lecture Date</th>
+                        <th>Date Lost</th>
+                        <th>Recoupment Date</th>
+                        <th>Classroom</th>
+                        <th>Start Time</th>
+                        <th>Duration</th>
+                        <th>Notes</th>
+                        <?php if ($_SESSION['role'] == 3) { ?>
+                            <th>Actions</th>
+                        <?php } ?>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
         <?php } ?>
     </div>
 
@@ -235,14 +241,15 @@ $recoupmentStatus[] = "Denied";
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Textarea 8 rows height -->
                     <div class="form-outline">
                         <textarea name="notes" class="form-control" id="textAreaExample2" rows="8"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle"></i>Close</button>
-                    <button type="submit" name="deny" id="deny" class="btn"><i class="far fa-check-circle"></i>Submit</button>
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle"></i>Close
+                    </button>
+                    <button type="submit" name="deny" id="deny" class="btn"><i class="far fa-check-circle"></i>Submit
+                    </button>
                 </div>
             </div>
         </div>
@@ -252,28 +259,23 @@ $recoupmentStatus[] = "Denied";
 <!-- View Notes Modal -->
 <div class="modal fade view-notes-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <form action="manage_recoupment_script.php?userID=<?php echo $recoupment['id']; ?>&action=2" method="get">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Notes</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Textarea 8 rows height -->
-                    <div class="form-outline">
-                        <!-- FIXME: perfect $recoupment['notes'] -->
-                        <textarea class="form-control" id="textAreaExample2" readonly
-                                  rows="8"><?php echo $recoupment['notes'] ?></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle me-2"></i>Close
-                    </button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Notes</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-outline">
+                    <input type="text" class="form-control" id="notesArea" readonly>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="far fa-times-circle me-2"></i>Close
+                </button>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 
 
@@ -284,17 +286,22 @@ $recoupmentStatus[] = "Denied";
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 <script>new DataTable('#dataTable');</script>
 <script>new DataTable('#recoupmentDataTable');</script>
-<script src='js/main.js'></script>
-
 <script>
-    function transferModalData() {
-        const button = document.querySelector('#deny')
-        const data_recoupment = document.querySelector('[data-recoupmentID]')
-        const getAttrData = data_recoupment.getAttribute('data-recoupmentID')
+    function transferRecoupmentID(btnClicked) { // θέτει το value του #deny να είναι το attribute 'data-recoupmentID' για να
+        const button = document.querySelector('#deny') // γίνει άρνηση της σωστής αναπλήρωσης
+        const getAttrData = btnClicked.getAttribute('data-recoupmentID')
 
         button.setAttribute('value', getAttrData)
     }
 </script>
+<script>
+    function transferViewData(btnClicked) { // γεμίζει το #notesArea με το notes της DB
+        const notesArea = document.querySelector('#notesArea')
+        notesArea.value=btnClicked.getAttribute('data-viewNotes')
+    }
+</script>
+<script src='js/main.js'></script>
+
 </body>
 
 </html>

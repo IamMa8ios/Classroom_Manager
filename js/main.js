@@ -1,27 +1,26 @@
 // -------------------------------------------------- timer button -------------------------------------------------- 
 function startTimer() {
-    // Set the countdown time to 10 minutes (600 seconds)
+    // αντίστροφη μέτρηση 10 λεπτών (600 seconds)
     var mins = 10; // minutes to countdown from
     var countdownTime = mins * 60;
 
-    // Update the timer every second
+    // Update το timer κάθε sec
     var timerInterval = setInterval(function () {
         countdownTime--;
 
-        // Display the remaining time on the button
+        // εμφάνιση ώρας που απομένει στο κουμπί
         document.querySelector('.timerBtn').innerHTML = `<i class="fas fa-sync-alt"></i> (${formatTime(countdownTime)})`;
 
-        // Check if the countdown has reached 0
+        // Αν το timer πάει 0
         if (countdownTime <= 0) {
-            clearInterval(timerInterval); // Stop the timer
-            alert('Time to logout!'); // Display the alert message
+            clearInterval(timerInterval); // σταματάμε το timer
             window.location.href = 'navbar-EN.php?logout=1';
         }
     }, 1000);
 }
 
 function formatTime(seconds) {
-    // Format the time as MM:SS
+    // Μορφοποίηση ώρας σε:  MM:SS
     var minutes = Math.floor(seconds / 60);
     var remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
@@ -44,13 +43,13 @@ function clearEventFileForm() {
 }
 
 function handleLabTheorySwitch(checkBoxID, hiddenElementID) {
+    // εμφανίζει ένα στοιχείο βάσει του αν είναι checked το στοιχείο με checkBoxID
     var checkbox = document.getElementById(checkBoxID);
     var element = document.getElementById(hiddenElementID);
 
     if (checkbox.checked) element.classList.remove('visually-hidden')
     else element.classList.add('visually-hidden')
 
-    // Attach an event listener to the checkbox's change event
     checkbox.addEventListener('change', function () {
         // If the checkbox is checked, remove the 'visually-hidden' class
         // If the checkbox is not checked, add the 'visually-hidden' class

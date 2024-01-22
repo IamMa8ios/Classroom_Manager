@@ -7,9 +7,8 @@ $stmt = $conn->prepare("select start_date from reservation where id=?");
 $initial_date=sanitize($_POST['initial-reservation']);
 $stmt->bind_param("i", $initial_date);
 $stmt->execute();
-$result = $stmt->get_result(); // get the mysqli result
+$result = $stmt->get_result(); // φέρνουμε την αρχική ημερομηνία του event
 $start_date = $result->fetch_assoc();
-printArray($start_date);
 $conn->close();
 
 $conn = connect2db();
@@ -27,11 +26,12 @@ $classID=sanitize($_POST['classID']);
 $start_time=sanitize($_POST['start_time']);
 $duration=sanitize($_POST['duration']);
 
+// αφού τα δεδομένα από post είναι διαμορφωμένα σωστά, εισάγουμε το recoupment request στη DB
 $stmt->bind_param("isssisi", $userID, $start_date['start_date'], $date_lost, $recoupment_date, $classID, $start_time, $duration);
 
-if($stmt->execute()){
+if($stmt->execute()){ // μήνυμα για το χρήστη
     $_SESSION['notification']['title'] = 'Success!';
-    $_SESSION['notification']['message'] = "The recoupment you requested ha been submitted.";
+    $_SESSION['notification']['message'] = "The recoupment you requested has been submitted.";
 }else{
     $_SESSION['notification']['title'] = 'Oops...';
     $_SESSION['notification']['message'] = "The recoupment you requested could not be completed.";

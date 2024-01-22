@@ -11,9 +11,12 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <h2> <?php echo $navTitle; ?></h2>
             <ul class="navbar-nav ms-auto d-flex justify-content-between align-items-baseline gap-3">
-                <li class="nav-item">
-                    <button class="btn-slide timerBtn rounded-pill" onclick="location.reload()"></button>
-                </li>
+
+                <?php if($_SESSION['role']>1){ ?>
+                    <li class="nav-item">
+                        <button class="btn-slide timerBtn rounded-pill" onclick="location.reload()"></button>
+                    </li>
+                <?php } ?>
 
                 <li class="nav-item">
                     <?php if ($_SESSION['role'] == 1) { ?>

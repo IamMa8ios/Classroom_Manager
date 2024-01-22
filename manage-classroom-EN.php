@@ -2,12 +2,14 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-$title = "Creating new Class";
-$action = "create";
-$name = $buildingName = $capacity = $time_available_start = $time_available_end = $days_available = $type = $computers = $projector = $locked = "";
+if ($_SESSION['role'] > 2) { //Μόνο οι διαχειριστές επιτρέπεται να διαχειριστούν αίθουσες
+    //Αρχικοποίηση μεταβλητών
+    $title = "Creating new Class";
+    $action = "create";
+    $name = $buildingName = $capacity = $time_available_start = $time_available_end = $days_available = $type = $computers =
+    $projector = $locked = "";
 
-if ($_SESSION['role'] > 2) {
-    if (isset($_POST['edit'])) {
+    if (isset($_POST['edit'])) {//εάν πρόκειται για επεξεργασία, φέρνουμε τα δεδομένα της αντίστοιχης αίθουσας
         $conn = connect2db();
         $stmt = $conn->prepare("select * from classroom where id = ?");
         $stmt->bind_param("i", $_POST['edit']);
@@ -196,13 +198,12 @@ $navTitle = $title;
                     </div>
                     <div class="row my-3">
                         <div class="col">
-                            <?php if(isset($_POST['edit'])){ ?>
-
+                            <?php
+                            //Δίνουμε τη δυνατότητα να διαγράψουμε αίθουσες που έχουν δημιουργηθεί
+                            if(isset($_POST['edit'])){?>
                                 <button class="btn btn-secondary btn-not" name="delete" title="Delete"
                                         value="<?php echo $_POST['edit']; ?>">Delete <i class="fas fa-trash-alt"></i>
-
                                 </button>
-<!--                                FIXME: change all buttons to sexy dashboard's buttons-->
                             <?php } ?>
                             <button type="button" class="btn btn-secondary btn-not" onclick="clearClassForm()">Clear <i
                                         class="fas fa-eraser"></i></button>
@@ -222,6 +223,7 @@ $navTitle = $title;
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
+    //Εμφανίζουμε ή αποκρύπτουμε το πεδίο για το πλήθος των υπολογιστών ανάλογα το είδος της αίθουσας
     $('#lab-switch-toggle').click(function(){
         if ($(this).is(':checked')) {
             $('#lab-capacity').removeClass('visually-hidden'); // checked

@@ -4,10 +4,13 @@ require_once "db_connector.php";
 
 $navTitle = "";
 
-if (isset($_POST['classroom'])) {
+//Επειδή κάθε αίθουσα έχει το δικό της πρόγραμμα, θα πρέπει να δοθεί μια αίθουσα ώστε να εμφανιστεί το πρόγραμμά της
+//Οι διαθέσιμες αίθουσες εμφανίζονται στο sidebar
+if (isset($_POST['classroom']) || isset($_SESSION['classroom'])) {
     $_SESSION['classID'] = $_POST['classroom'];
-    $conn = connect2db();
 
+    //φέρνουμε τα δεδομένα για τη συγκεκριμένη αίθουσα
+    $conn = connect2db();
     $stmt = $conn->prepare("select name from classroom where id=?");
     $stmt->bind_param("i", $_POST['classroom']);
     $stmt->execute();
@@ -22,7 +25,7 @@ if (isset($_POST['classroom'])) {
     $navTitle = "Please Select a Classroom";
 }
 
-//$_SESSION['notification'] = 'createSuccessAlert()';
+//Το ημερολόγιο στο οποίο εμφανίζεται το πρόγραμμα της αίθουσας δημιουργείται με τη βοήθεια της βιβλιοθήκης fullCalendar
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +105,7 @@ if (isset($_POST['classroom'])) {
             echo "Please select a classroom from the menu on the left";
         } ?>
     </div>
-    <input class="visually-hidden" id="hidden-userID" value="*test id*">
+    <input class="visually-hidden" id="hidden-userID" value="">
 </div>
 
 <!-- Bootstrap JS, Popper.js, and jQuery -->
@@ -116,7 +119,7 @@ if (isset($_POST['classroom'])) {
 <script src='fullcalendar/packages/list/main.js'></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () { // init js FullCalendar
 
         var calendarEl = document.getElementById('calendar');
 
@@ -131,39 +134,40 @@ if (isset($_POST['classroom'])) {
             },
             defaultView: 'dayGridMonth',
             defaultDate: '2023-12-12',
-            navLinks: true, // can click day/week names to navigate views
+            navLinks: true,
             editable: false,
-            eventLimit: true, // allow "more" link when too many events
+            eventLimit: true, //Σε περίπτωση που υπάρχουν πολλές κρατήσεις σε μια ημέρα, να εμφανίζονται σε ξεχωριστά
+            //ορίζουμε το αρχείο από το οποίο θα αντλεί τα δεδομένα για εμφάνιση
             events: {
-                url: 'reservation_loader_script.php?classroom=<?php echo $_POST["classroom"]; ?>',
+                url: 'reservation_loader_script.php?classroom=<?php echo $_POST["classroom"]; // φέρνει τα events από DB?>',
                 dataType: 'json',
                 type: "POST",
                 color: "#1f2029"
             },
-            <?php if($_SESSION['role'] != 1){ ?>
-            dateClick: function (info) {
+            <?php
+            //εάν πρόκειται για εγγεγραμένο χρήστη, με την επιλογή μιας ημέρας του ημερολογίου δύναται η
+            // δημιουργία μιας κράτησης ή αναπλήρωσης
+            if($_SESSION['role'] != 1){ ?>
+            dateClick: function (info) { // κάθε κελί όταν κλικαριστεί --> create event
                 location.href = `create_event-EN.php?date=${info.dateStr}`;
             },
             <?php } ?>
             <?php if($_SESSION['role'] > 2){ ?>
             eventRender: function (info) {
-                // Customize the event rendering here
                 var $eventElement = info.el;
 
-                // Add a custom button with an icon
                 var $editEventBtn = document.createElement('a');
-                // $editEventBtn.classList.add('btn');
                 $editEventBtn.style.color = 'var(--white-ish)';
-                $editEventBtn.innerHTML = '<i class="fas fa-edit"></i>'; // Example icon using Font Awesome
+                $editEventBtn.innerHTML = '<i class="fas fa-edit"></i>';
 
-                // Add an event listener to the custom button
+                // σε κάθε event δημιουργείτε ενα κουμπί που όταν γίνει κλικ
+                // γίνεται post στο edit-event-EN.php για Edit
                 $editEventBtn.addEventListener('click', function () {
-                    // Create a form element
+                    // Δημιουργείται μια φόρμα στην οποία εισάγουμε ένα κρυφό input με value το userID να γα γίνει post
                     var form = document.createElement('form');
                     form.method = 'post';
                     form.action = 'edit-event-EN.php';
 
-                    // Create input fields and add them to the form
                     var userID = document.querySelector('#hidden-userID');
                     var eventID = document.createElement('input');
                     eventID.type = 'hidden';
@@ -175,7 +179,7 @@ if (isset($_POST['classroom'])) {
                     form.submit();
                 });
 
-                // Append the custom button to the event element
+                // βάζουμε το κουμπί στο event
                 $eventElement.appendChild($editEventBtn);
             }
             <?php } ?>

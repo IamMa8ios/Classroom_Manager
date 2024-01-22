@@ -4,7 +4,7 @@ require_once "db_connector.php";
 
 $navTitle = "";
 
-if (isset($_POST['classroom'])) {
+if (isset($_POST['classroom']) || isset($_SESSION['classroom'])) {
     $_SESSION['classID'] = $_POST['classroom'];
     $conn = connect2db();
 

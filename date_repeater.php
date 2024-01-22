@@ -1,4 +1,5 @@
 <?php
+//Μέθοδος που παράγει όλες τις ενδιάμεσες ημερομηνίες σε ένα διάστημα, ανά εβδομάδα
 function getDatesBetween($begin,$end){
 
     $begin = new DateTime($begin);

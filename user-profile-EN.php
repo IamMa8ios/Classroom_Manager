@@ -8,8 +8,10 @@ $userID = $_SESSION['userID'];
 
 if ($_SESSION['role'] > 1) { //if logged in
 
-    if ($_SESSION['role'] == 4 && isset($_GET['userID'])) { //if admin is managing a user's profile
-        $userID = $_GET['userID'];
+    //εάν πρόκειται για προφίλ καθηγητή (είτε ίδιος είναι καθηγητής, είτε ο διαχειριστής του το επεξεργάζεται)
+    if (($_SESSION['role'] == 4 && isset($_GET['userID'])) || $_SESSION['role'] == 2) {
+
+        $userID = $_SESSION['role']==2?$_SESSION['userID']:$_GET['userID'];
 
         $conn = connect2db();
         $stmt = $conn->prepare("SELECT * FROM teacher WHERE userID = ?");
