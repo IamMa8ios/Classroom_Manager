@@ -2,7 +2,7 @@
 require_once "db_connector.php";
 require_once "session_manager.php";
 
-if($_SESSION['role']==4) { //Για τους χρήστες υπάρχει ο κατάλληλος διαχειριστής
+if($_SESSION['role']==4 || $_SESSION['role']==2) { //Για τους χρήστες υπάρχει ο κατάλληλος διαχειριστής
 
     if (isset($_POST['save'])) { //Αν πρόκειται για ενημέρωση των στοιχείων ενός χρήστη
 

@@ -145,7 +145,7 @@ if (isset($_POST['classroom']) || isset($_SESSION['classroom'])) {
                 location.href = `create_event-gr.php?date=${info.dateStr}`;
             },
             <?php } ?>
-            <?php if($_SESSION['role'] > 2){ ?>
+            <?php if($_SESSION['role'] == 3){ ?>
             eventRender: function (info) {
                 // Customize the event rendering here
                 var $eventElement = info.el;

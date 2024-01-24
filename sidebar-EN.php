@@ -25,6 +25,8 @@ foreach ($result as $building) {
 
 }
 $conn->close();
+
+//fixme: add comments
 ?>
 
 <nav class="sidebar rounded-right">

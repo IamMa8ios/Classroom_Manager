@@ -16,8 +16,7 @@ $sql="insert into recoupment_requests(userID, request_start, date_lost, date_rec
  values(?, str_to_date(?,'%Y-%m-%d'), str_to_date(?,'%Y-%m-%d'), ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
-$userID = sanitize($_POST['teacher']) ?? $_SESSION['userID'];
-if(isset($_POST['userID'])) $userID=sanitize($_POST['userID']);
+$userID=isset($_POST['teacher'])?sanitize($_POST['teacher']):$_SESSION['userID'];
 $date_lost=date_create(sanitize($_POST['date_lost']));
 $date_lost=date_format($date_lost,"Y-m-d");
 $recoupment_date=date_create(sanitize($_POST['recoupment-date']));
