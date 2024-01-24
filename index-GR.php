@@ -88,12 +88,12 @@ if (isset($_POST['classroom']) || isset($_SESSION['classroom'])) {
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <?php require_once "sidebar-gr.php" ?>
+    <?php require_once "sidebar-gr.php"; ?>
 
     <!-- Page Content -->
     <div id="content">
-        <?php require_once "navbar-gr.php" ?>
-        <?php require_once "modal.php" ?>
+        <?php require_once "navbar-gr.php"; ?>
+        <?php require_once "modal.php"; ?>
 
         <?php if (isset($_POST['classroom'])) { ?>
             <!-- FullCalendar -->

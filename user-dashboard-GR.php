@@ -9,7 +9,7 @@ if ($_SESSION['role'] == 1) {
 $title = "Το Ταμπλό μου";
 $navTitle = $title;
 
-if ($_SESSION['role'] != 2) {
+if ($_SESSION['role'] == 4) {
 
     $conn = connect2db();
     $stmt = $conn->prepare("select id, name, email, department, roleID from user");

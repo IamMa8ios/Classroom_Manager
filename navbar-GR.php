@@ -4,6 +4,20 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
     session_destroy();
     header('Location: index-gr.php');
 }
+
+$currentLocation=strtolower($_SERVER['PHP_SELF']);
+if(isset($_GET)){
+    $extras=$_GET;
+    $currentLocation=$currentLocation."?";
+    foreach ($extras as $label=>$extra){
+        $currentLocation=$currentLocation.$label."=".$extra."&";
+    }
+    $currentLocation=substr_replace($currentLocation ,"", -1);
+}
+$greekLocation=str_replace('-en', '-gr', $currentLocation);
+$englishLocation=str_replace('-gr', '-en', $currentLocation);
+
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark">
@@ -39,18 +53,18 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
                             </li>
 
                             <li class="nav-item">
-                                <a class="dropdown-item" href="index-gr.php">
+                                <a class="dropdown-item" href="<?php echo $englishLocation; ?>">
                                     <img src="img/united-states_64px.png" class="img-responsive inline-block" alt="english flag"></img>
                                     EN-US
                                 </a>
-                                <a class="dropdown-item" href="index-GR.php">
+                                <a class="dropdown-item" href="<?php echo $greekLocation; ?>">
                                     <img src="img/greece_64px.png" class="img-responsive inline-block" alt="greek flag"></img>
                                     GR
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li class="mt-4">
-                                    <form action="navbar-gr.php" method="POST">
+                                    <form action="navbar-GR.php" method="POST">
                                         <button name="logout" value="logout" class="dropdown-item btn-slide"><span><i
                                                         class="fas fa-sign-out-alt"></i> Αποσύνδεση</span>
                                         </button>
