@@ -4,9 +4,9 @@ require_once "db_connector.php";
 
 $title = "My Profile";
 $email = $name = $department = "";
-$userID = $_SESSION['userID'];
 
 if ($_SESSION['role'] > 1) { //if logged in
+    $userID = ""; //αρχικοποιούμε τη μεταβλητή για το χρήστη του οποίου θα δούμε το προφίλ
 
     //εάν πρόκειται για προφίλ καθηγητή (είτε ίδιος είναι καθηγητής, είτε ο διαχειριστής του το επεξεργάζεται)
     if (($_SESSION['role'] == 4 && isset($_GET['userID'])) || $_SESSION['role'] == 2) {
@@ -35,7 +35,7 @@ $department = $userProfile['department'];
 
 function loadUserProfile($profileID)
 {
-    //any user viewing their profile
+    //δεδομένα που είναι κοινά για όλους τους χρήστες
     $conn = connect2db();
     $stmt = $conn->prepare("SELECT name, email, department FROM user WHERE id = ?");
     $stmt->bind_param("i", $profileID);

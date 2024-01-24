@@ -2,61 +2,75 @@
 require_once "session_manager.php";
 require_once "db_connector.php";
 
-if ($_SESSION['role'] == 1) {
+if ($_SESSION['role'] == 1) { //αρχικά πρέπει να έχει συνδεθεί χρήστης για να δει το προφίλ του
     header("Location: index-EN.php");
 }
 
 $title = "My Dashboard";
 $navTitle = $title;
 
-if ($_SESSION['role'] != 2) {
+if ($_SESSION['role'] == 4) { //εάν πρόκειται για διαχειριστή χρηστών
 
+    //φέρνουμε τα στοιχεία όλων των χρηστών
     $conn = connect2db();
     $stmt = $conn->prepare("select id, name, email, department, roleID from user");
     $stmt->execute();
-    $result = $stmt->get_result(); // get the mysqli result
+    $result = $stmt->get_result();
 
+    //και τα κρατάμε σε έναν πίνακα
     $users = array();
     while ($user = $result->fetch_assoc()) {
         $users[] = $user;
     }
     $conn->close();
 
+    //στη συνέχεια φέρνουμε τους ρόλους που μπορεί να έχουν οι χρήστες
     $conn = connect2db();
     $stmt = $conn->prepare("select id, name from role");
     $stmt->execute();
     $result = $stmt->get_result(); // get the mysqli result
 
+    //και τους κρατάμε σε νέο πίνακα
     $roles = array();
     while ($role = $result->fetch_assoc()) {
         $roles[] = $role;
     }
     $conn->close();
+
+}else{ //εάν πρόκειται για διαχειριστή κρατήσεων ή καθηγητή
+
+    //φέρνουμε όλα τα αιτήματα αναπλήρωσης
+    $conn = connect2db();
+    $sql = "select id, status, request_start, date_lost, date_recouped, classroomID, start_time, duration, notes from recoupment_requests";
+
+    //και στην περίπτωση του καθηγητή περιοριζόμαστε μόνο στα δικά του αιτήματα
+    if ($_SESSION['role'] == 2) {
+        $sql = $sql . " where userID=?";
+    }
+
+    $stmt = $conn->prepare($sql);
+
+    if ($_SESSION['role'] == 2) {
+        $stmt->bind_param("i", $_SESSION['userID']);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    //μετά κρατάμε και τα αιτήματα σε νέο πίνακα
+    $recoupments = array();
+    while ($recoupment = $result->fetch_assoc()) {
+        $recoupments[] = $recoupment;
+    }
+    $conn->close();
+
+    //Η σημασία που έχει η τιμή της μεταβλητής status στη βάση δεδομένων
+    $recoupmentStatus[] = "Pending";
+    $recoupmentStatus[] = "Approved";
+    $recoupmentStatus[] = "Denied";
+
 }
 
-$conn = connect2db();
-$sql = "select id, status, request_start, date_lost, date_recouped, classroomID, start_time, duration, notes from recoupment_requests";
-if ($_SESSION['role'] == 2) {
-    $sql = $sql . " where userID=?";
-}
-$stmt = $conn->prepare($sql);
-if ($_SESSION['role'] == 2) {
-    $stmt->bind_param("i", $_SESSION['userID']);
-}
-$stmt->execute();
-$result = $stmt->get_result(); // get the mysqli result
 
-$recoupments = array();
-while ($recoupment = $result->fetch_assoc()) {
-    $recoupments[] = $recoupment;
-}
-$conn->close();
-
-$recoupmentStatus[] = "Pending";
-$recoupmentStatus[] = "Approved";
-$recoupmentStatus[] = "Denied";
-
-//FIXME: deny recoupment
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +104,10 @@ $recoupmentStatus[] = "Denied";
         <?php require_once "navbar-EN.php"; ?>
         <?php require_once "modal.php"; ?>
 
-        <?php if ($_SESSION['role'] == 4) { ?>
+        <?php
+        //για το διαχειριστή χρηστών εμφανίζουμε έναν πίνακα με όλους τους χρήστες, απ' όπου θα
+        //μπορεί να επιλέξει ποιον θέλει να επεξεργαστεί
+        if ($_SESSION['role'] == 4) { ?>
             <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
 
                 <h2 class="my-3">Users</h2>
@@ -139,7 +156,10 @@ $recoupmentStatus[] = "Denied";
                 </table>
 
             </div>
-        <?php } else { ?>
+        <?php }
+        //αλλιώς εμφανίζουμε τα αιτήματα των αναπληρώσεων και στο διαχειριστή δίνουμε επιπλέον
+        // τη δυνατότητα να τα δεχτεί ή να τα απορρίψει
+        else { ?>
             <div class="container-fluid mt-5 p-3 bg-purple-svg rounded-4">
 
                 <h2 class="my-3">Recoupment Requests</h2>

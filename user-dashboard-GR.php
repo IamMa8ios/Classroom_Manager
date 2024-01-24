@@ -32,29 +32,32 @@ if ($_SESSION['role'] != 2) {
         $roles[] = $role;
     }
     $conn->close();
-}
 
-$conn = connect2db();
-$sql = "select id, status, request_start, date_lost, date_recouped, classroomID, start_time, duration, notes from recoupment_requests";
-if ($_SESSION['role'] == 2) {
-    $sql = $sql . " where userID=?";
-}
-$stmt = $conn->prepare($sql);
-if ($_SESSION['role'] == 2) {
-    $stmt->bind_param("i", $_SESSION['userID']);
-}
-$stmt->execute();
-$result = $stmt->get_result(); // get the mysqli result
+}else{
 
-$recoupments = array();
-while ($recoupment = $result->fetch_assoc()) {
-    $recoupments[] = $recoupment;
-}
-$conn->close();
+    $conn = connect2db();
+    $sql = "select id, status, request_start, date_lost, date_recouped, classroomID, start_time, duration, notes from recoupment_requests";
+    if ($_SESSION['role'] == 2) {
+        $sql = $sql . " where userID=?";
+    }
+    $stmt = $conn->prepare($sql);
+    if ($_SESSION['role'] == 2) {
+        $stmt->bind_param("i", $_SESSION['userID']);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result(); // get the mysqli result
 
-$recoupmentStatus[] = "Pending";
-$recoupmentStatus[] = "Approved";
-$recoupmentStatus[] = "Denied";
+    $recoupments = array();
+    while ($recoupment = $result->fetch_assoc()) {
+        $recoupments[] = $recoupment;
+    }
+    $conn->close();
+
+    $recoupmentStatus[] = "Pending";
+    $recoupmentStatus[] = "Approved";
+    $recoupmentStatus[] = "Denied";
+
+}
 
 ?>
 
